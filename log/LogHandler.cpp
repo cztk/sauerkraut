@@ -50,7 +50,6 @@ void LogHandler::thread_main() {
     while (!_stop) {
         std::unique_lock<std::mutex> lk(_main_mutex);
         _cv.wait(lk, [this]{return _process;});
-        if(_stop) break;
 
         if(!messageQueue.empty()) {
             while(!messageQueue.empty()) {

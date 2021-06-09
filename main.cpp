@@ -1,5 +1,4 @@
 #include <iostream>
-#include <zconf.h>
 #include "config/Config.h"
 #include "log/LogHandler.h"
 
@@ -16,10 +15,7 @@ int main() {
     auto *logHandler = new LogHandler(&config);
     auto logHandlerThread = logHandler->run();
 
-    logHandler->log(0, "test");
-    sleep(10);
-    logHandler->log(0, "test");
-    sleep(10);
+
 
     logHandler->stop();
     if(logHandlerThread.joinable()) {
