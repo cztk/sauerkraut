@@ -4,35 +4,39 @@
 
 #include "FileLogger.h"
 
-FileLogger::FileLogger(ConfigSection *pConfigSection) : _configSection(pConfigSection) {
+namespace log {
 
-}
+    FileLogger::FileLogger(config::ConfigSection *pConfigSection) : _configSection(pConfigSection) {
 
-void FileLogger::log(int loglevel, const std::string *text) {
-    if(nullptr != _logFile) {
-        fputs(text->c_str(), _logFile);
     }
-}
 
-void FileLogger::init() {
-
-    for(auto const& option: _configSection->options) {
-        if("filename" == option.first) {
-            _config.filename = option.second;
+    void FileLogger::log(int loglevel, const std::string *text) {
+        if (nullptr != _logFile) {
+            fputs(text->c_str(), _logFile);
         }
     }
 
-    openLog();
-}
+    void FileLogger::init() {
 
-void FileLogger::deinit() {
-    closeLog();
-}
+        for (auto const &option: _configSection->options) {
+            if ("filename" == option.first) {
+                _config.filename = option.second;
+            }
+        }
 
-void FileLogger::openLog() {
-    _logFile = fopen(_config.filename.c_str(), "a+");
-}
+        openLog();
+    }
 
-void FileLogger::closeLog() {
-    fclose(_logFile);
+    void FileLogger::deinit() {
+        closeLog();
+    }
+
+    void FileLogger::openLog() {
+        _logFile = fopen(_config.filename.c_str(), "a+");
+    }
+
+    void FileLogger::closeLog() {
+        fclose(_logFile);
+    }
+
 }

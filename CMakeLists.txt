@@ -15,4 +15,7 @@ endif (RELEASE_BUILD)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 
-add_executable(sauerkraut main.cpp config/Config.h config/Config.cpp log/Logger.h log/LogHandler.h log/LogHandler.cpp log/loggers/FileLogger.h log/loggers/FileLogger.cpp utils/LockedQueue.h)
+add_executable(sauerkraut main.cpp config/Config.h config/Config.cpp log/Logger.h log/LogHandler.h log/LogHandler.cpp log/loggers/FileLogger.h log/loggers/FileLogger.cpp utils/LockedQueue.h engine/engine.h utils/FileSystem.h scripting/ScriptingHandler.cpp scripting/ScriptingHandler.h)
+target_include_directories(sauerkraut PUBLIC "/usr/local/include/cubescript")
+target_link_directories(sauerkraut PUBLIC "/usr/local/lib/x86_64-linux-gnu")
+target_link_libraries(sauerkraut cubescript)

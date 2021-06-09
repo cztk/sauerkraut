@@ -8,20 +8,34 @@
 
 #include <string>
 #include <vector>
+#include <getopt.h>
+#include <filesystem>
+#include "../engine/engine.h"
 
-struct ConfigSection {
-    std::string name;
-    std::vector<std::pair<std::string, std::string>> options;
-};
+namespace config {
 
-class Config {
-public:
-    std::vector<ConfigSection> logger;
+    struct ConfigSection {
+        std::string name;
+        std::vector<std::pair<std::string, std::string>> options;
+    };
+
+    struct EngineConfig {
+    };
+
+    class Config {
+    public:
+        std::vector<ConfigSection> logger;
+        EngineConfig engine{};
+
+        int dedicated = 0;
+        std::string homedir;
+
+        void parseArgs(int argc, char **argv);
+
+        void parseImportantArgs(int argc, char **argv);
 
 
-private:
-
-};
-
+    };
+}
 
 #endif //SAUERKRAUT_CONFIG_H

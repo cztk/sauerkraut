@@ -9,27 +9,35 @@
 #include "../Logger.h"
 #include "../../config/Config.h"
 
-class FileLogger : public Logger {
+namespace log {
 
-    struct FileLoggerConfig {
-        std::string filename;
+    class FileLogger : public Logger {
 
+        struct FileLoggerConfig {
+            std::string filename;
+
+        };
+
+    public:
+        explicit FileLogger(config::ConfigSection *pConfigSection);
+
+        void init() override;
+
+        void deinit() override;
+
+        virtual void log(int loglevel, const std::string *text);
+
+    private:
+        FILE *_logFile{};
+        config::ConfigSection *_configSection;
+
+        FileLoggerConfig _config{};
+
+        void openLog();
+
+        void closeLog();
     };
 
-public:
-    explicit FileLogger(ConfigSection *pConfigSection);
-    void init() override;
-    void deinit() override;
-    virtual void log(int loglevel, const std::string *text);
-private:
-    FILE * _logFile{};
-    ConfigSection *_configSection;
-
-    FileLoggerConfig _config{};
-
-    void openLog();
-    void closeLog();
-};
-
+}
 
 #endif //SAUERKRAUT_FILELOGGER_H
