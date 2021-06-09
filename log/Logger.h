@@ -5,6 +5,8 @@
 #ifndef SAUERKRAUT_LOGGER_H
 #define SAUERKRAUT_LOGGER_H
 
+#include <string>
+
 class Logger {
 public:
     virtual void init() = 0;

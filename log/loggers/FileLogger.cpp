@@ -17,7 +17,7 @@ void FileLogger::log(int loglevel, const std::string *text) {
 void FileLogger::init() {
 
     for(auto const& option: _configSection->options) {
-        if("logfile" == option.first) {
+        if("filename" == option.first) {
             _config.filename = option.second;
         }
     }

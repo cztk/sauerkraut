@@ -16,7 +16,8 @@ class LogHandler {
 
 public:
     explicit LogHandler(Config *pConfig);
-    void log(int loglevel, const std::string *text);
+    ~LogHandler();
+    void log(int loglevel, const std::string text);
 private:
     Config *_config;
     std::vector<Logger*> logger;
