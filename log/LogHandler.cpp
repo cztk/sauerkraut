@@ -12,10 +12,10 @@ LogHandler::~LogHandler() {
     deinitialize();
 }
 
-void LogHandler::log(int loglevel, const std::string text) {
-    for(auto const &obj : logger) {
-        obj->log(loglevel, &text);
-    }
+void LogHandler::log(int loglevel, const std::string& text) {
+    messageQueue.push(std::pair(loglevel, text));
+    _process = true;
+    _cv.notify_one();
 }
 
 void LogHandler::initialize() {
@@ -25,17 +25,50 @@ void LogHandler::initialize() {
         if("FileLogger" == loggerconf.name) {
             auto *actlogger = new FileLogger(&loggerconf);
             actlogger->init();
-            logger.push_back(actlogger);
+            _logger.push_back(actlogger);
         }
     }
 }
 
 void LogHandler::deinitialize() {
     std::unique_lock<std::mutex> lock(_logger_mutex);
-    for(auto actlogger: logger) {
+    for(auto actlogger: _logger) {
         actlogger->deinit();
         delete actlogger;
     }
-    logger.clear();
+    _logger.clear();
 
+}
+
+std::thread LogHandler::run() {
+    return std::thread([this] { this->thread_main(); });
+}
+
+void LogHandler::thread_main() {
+    initialize();
+
+    while (!_stop) {
+        std::unique_lock<std::mutex> lk(_main_mutex);
+        _cv.wait(lk, [this]{return _process;});
+        if(_stop) break;
+
+        if(!messageQueue.empty()) {
+            while(!messageQueue.empty()) {
+                auto entry = messageQueue.pop();
+                for(auto const &obj : _logger) {
+                    obj->log(entry.first, &entry.second);
+                }
+            }
+        }
+        _process =false;
+        lk.unlock();
+    }
+
+}
+
+void LogHandler::stop() {
+    {
+        _stop = true;
+        _cv.notify_one();
+    }
 }
