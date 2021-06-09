@@ -9,7 +9,7 @@ class Logger {
 public:
     virtual void init() = 0;
     virtual void deinit() = 0;
-    virtual void log(int loglevel, std::string *text) = 0;
+    virtual void log(int loglevel, const std::string *text) = 0;
     virtual ~Logger() = default;
 };
 

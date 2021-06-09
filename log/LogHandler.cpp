@@ -8,7 +8,7 @@ LogHandler::LogHandler(Config *pConfig) : _config(pConfig) {
 
 }
 
-void LogHandler::log(int loglevel, std::string *text) {
+void LogHandler::log(int loglevel, const std::string *text) {
 
 }
 
@@ -17,7 +17,7 @@ void LogHandler::initialize() {
     std::unique_lock<std::mutex> lock(_logger_mutex);
     for(auto const& loggerconf: _config->logger) {
         if("FileLogger" == loggerconf.name) {
-            auto *actlogger = new FileLogger(_config);
+            auto *actlogger = new FileLogger(&loggerconf);
             logger.push_back(actlogger);
         }
     }

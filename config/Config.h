@@ -11,7 +11,7 @@
 
 struct ConfigSection {
     std::string name;
-    std::pair<std::string, std::string> options;
+    std::vector<std::pair<std::string, std::string>> options;
 };
 
 class Config {

@@ -11,11 +11,24 @@
 
 class FileLogger : public Logger {
 
+    struct FileLoggerConfig {
+        std::string filename;
+
+    };
+
 public:
-    explicit FileLogger(Config *pConfig);
-    virtual void init();
-    virtual void deinit();
-    virtual void log(int loglevel, std::string *text);
+    explicit FileLogger(ConfigSection *pConfigSection);
+    void init() override;
+    void deinit() override;
+    virtual void log(int loglevel, const std::string *text);
+private:
+    FILE * _logFile{};
+    ConfigSection *_configSection;
+
+    FileLoggerConfig _config{};
+
+    void openLog();
+    void closeLog();
 };
 
 
