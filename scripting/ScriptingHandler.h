@@ -5,10 +5,30 @@
 #ifndef SAUERKRAUT_SCRIPTINGHANDLER_H
 #define SAUERKRAUT_SCRIPTINGHANDLER_H
 
+#include "../config/Config.h"
+#include "bindings/LibCubeScript.h"
 
-class ScriptingHandler {
+namespace scripting {
 
-};
+    struct supportedlanguage {
+        std::string name;
+        void* scriptenginehnd;
+    };
 
+    class ScriptingHandler {
+    public:
+        explicit ScriptingHandler(config::Config *pConfig);
+        ~ScriptingHandler();
+
+    private:
+        config::Config *_config;
+
+        std::vector<supportedlanguage> scriptengines;
+
+        void initialize();
+        void deinitialize();
+    };
+
+}
 
 #endif //SAUERKRAUT_SCRIPTINGHANDLER_H

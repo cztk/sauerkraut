@@ -20,13 +20,9 @@ namespace log {
 
     public:
         explicit LogHandler(config::Config *pConfig);
-
         ~LogHandler();
-
         std::thread run();
-
         void stop();
-
         void log(int loglevel, const std::string &text);
 
     private:
@@ -40,7 +36,6 @@ namespace log {
         utils::LockedQueue<std::pair<int, std::string>> messageQueue;
 
         void initialize();
-
         void deinitialize();
 
         void thread_main();
