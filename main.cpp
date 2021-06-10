@@ -24,12 +24,15 @@ int main(int argc, char **argv) {
 
 
 
+
+
     logHandler->stop();
     if(logHandlerThread.joinable()) {
         logHandlerThread.join();
     }
 
     delete scriptingHandler;
+    delete logHandler;
 
     return 0;
 }
