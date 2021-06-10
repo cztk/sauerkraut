@@ -10,9 +10,9 @@
 #include <mutex>
 #include <condition_variable>
 #include <thread>
-#include "../config/Config.h"
 #include "Logger.h"
 #include "../utils/LockedQueue.h"
+#include "../config/ConfigSection.h"
 
 
 namespace log {
@@ -20,14 +20,14 @@ namespace log {
     class LogHandler {
 
     public:
-        explicit LogHandler(config::Config *pConfig);
+        explicit LogHandler();
         ~LogHandler();
         std::thread run();
         void stop();
+        void initialize(config::ConfigSection loggerconf);
         void log(log::LogLevel loglevel, const std::string& text);
 
     private:
-        config::Config *_config;
         std::vector<Logger *> _logger;
         std::mutex _logger_mutex;
         std::mutex _main_mutex;
@@ -35,8 +35,6 @@ namespace log {
         bool _stop = false;
         bool _process = false;
         utils::LockedQueue<std::pair<LogLevel, std::string>> messageQueue;
-
-        void initialize();
         void deinitialize();
 
         void thread_main();

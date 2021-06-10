@@ -11,30 +11,51 @@
 #include <getopt.h>
 #include <filesystem>
 #include "../engine/engine.h"
+#include "ConfigSection.h"
+#include "../log/LogHandler.h"
 
 namespace config {
 
-    struct ConfigSection {
-        std::string name;
-        std::vector<std::pair<std::string, std::string>> options;
+    struct EngineConfig {
+        std::vector<std::string> packagedirs;
+        int screen_w = 320;
+        int screen_h = 200;
+        int screen_depthbits = 24;
+        int screen_fsaa = 0;
+        int screen_fullscreen = 1;
     };
 
-    struct EngineConfig {
+    struct ServerConfig {
+        int dedicated = 0;
+        int serveruprate = 0;
+        int maxclients = 12;
+        std::string serverip = "127.0.0.1";
+        int serverport = 28785;
+        std::string mastername = "";
+        int updatemaster = 0;
+    };
+
+    struct GameConfig {
+        int load_firstmap = 0;
+        std::string firstmap;
     };
 
     class Config {
     public:
         std::vector<ConfigSection> logger;
-        EngineConfig engine{};
-
-        int dedicated = 0;
         std::string homedir;
+        std::string initscript;
+
+        EngineConfig engine{};
+        ServerConfig server{};
+        GameConfig game{};
+
 
         void parseArgs(int argc, char **argv);
-
         void parseImportantArgs(int argc, char **argv);
-
-
+        void setlogHandler(log::LogHandler *pHandler);
+    private:
+        log::LogHandler *_loghandler = nullptr;
     };
 }
 

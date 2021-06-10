@@ -17,7 +17,7 @@ namespace scripting {
         std::ostringstream buf;
         std::ifstream input (filename);
         buf << input.rdbuf();
-
+        // TODO check execution state
         cubescript_state.compile(std::string_view{buf.str().c_str(), std::size_t(buf.str().size())}, filename).call(cubescript_state);
         return true;
     }

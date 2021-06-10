@@ -6,9 +6,7 @@
 #include "loggers/FileLogger.h"
 
 namespace log {
-    LogHandler::LogHandler(config::Config *pConfig) : _config(pConfig) {
-        initialize();
-    }
+    LogHandler::LogHandler() = default;
 
     LogHandler::~LogHandler() {
         deinitialize();
@@ -20,16 +18,14 @@ namespace log {
         _cv.notify_one();
     }
 
-    void LogHandler::initialize() {
+    void LogHandler::initialize(config::ConfigSection loggerconf) {
         // TODO: something reflection like implementation
         std::unique_lock<std::mutex> lock(_logger_mutex);
-        for (auto &loggerconf: _config->logger) {
             if ("FileLogger" == loggerconf.name) {
                 auto *actlogger = new FileLogger(&loggerconf);
                 actlogger->init();
                 _logger.push_back(actlogger);
             }
-        }
     }
 
     void LogHandler::deinitialize() {
@@ -47,7 +43,6 @@ namespace log {
     }
 
     void LogHandler::thread_main() {
-        initialize();
 
         while (!_stop) {
             std::unique_lock<std::mutex> lk(_main_mutex);
