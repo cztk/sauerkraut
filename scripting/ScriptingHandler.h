@@ -7,6 +7,8 @@
 
 #include "../config/Config.h"
 #include "bindings/LibCubeScript.h"
+#include "../log/LogHandler.h"
+#include "../utils/stringhelper.h"
 
 namespace scripting {
 
@@ -17,16 +19,17 @@ namespace scripting {
 
     class ScriptingHandler {
     public:
-        explicit ScriptingHandler(config::Config *pConfig);
+        explicit ScriptingHandler(config::Config *pConfig, log::LogHandler *pLogHandler);
         ~ScriptingHandler();
 
-        bool do_run_file(const char* filename);
+        bool execute(const char* filename, const char* scriptinglanguage);
         void bind_var(const char *varname, float *var, bool readonly);
         void bind_var(const char *varname, int *var, bool readonly);
         void bind_var(const char *varname, std::string *var, bool readonly);
 
     private:
         config::Config *_config;
+        log::LogHandler *_logHandler;
 
         std::vector<supportedlanguage> scriptengines;
 

@@ -13,7 +13,7 @@ namespace scripting {
 
     }
 
-    bool LibCubeScript::do_run_file(const char* filename) {
+    bool LibCubeScript::execute(const char* filename) {
         std::ostringstream buf;
         std::ifstream input (filename);
         buf << input.rdbuf();

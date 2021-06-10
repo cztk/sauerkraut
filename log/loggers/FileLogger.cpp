@@ -10,9 +10,9 @@ namespace log {
 
     }
 
-    void FileLogger::log(int loglevel, const std::string *text) {
+    void FileLogger::log(LogLevel loglevel, const std::string &text) {
         if (nullptr != _logFile) {
-            fputs(text->c_str(), _logFile);
+            fputs(text.c_str(), _logFile);
         }
     }
 

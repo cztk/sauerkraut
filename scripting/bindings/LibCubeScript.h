@@ -17,7 +17,7 @@ namespace scripting {
     public:
         LibCubeScript();
         ~LibCubeScript();
-        bool do_run_file(const char* filename);
+        bool execute(const char* filename);
 
         void bind_var(const char *varname, float *var, bool readonly);
         void bind_var(const char *varname, int *var, bool readonly);

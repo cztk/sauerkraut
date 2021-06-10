@@ -9,13 +9,24 @@
 
 namespace log {
 
+    enum class LogLevel
+    {
+        None = 6,
+        Critical = 5,
+        Error = 4,
+        Warning = 3,
+        Info = 2,
+        Debug = 1,
+        Trace = 0
+    };
+
     class Logger {
     public:
         virtual void init() = 0;
 
         virtual void deinit() = 0;
 
-        virtual void log(int loglevel, const std::string *text) = 0;
+        virtual void log(LogLevel loglevel, const std::string &text) = 0;
 
         virtual ~Logger() = default;
     };

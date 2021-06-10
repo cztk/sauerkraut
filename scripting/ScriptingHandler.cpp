@@ -6,7 +6,7 @@
 
 namespace scripting {
 
-    ScriptingHandler::ScriptingHandler(config::Config *pConfig) : _config(pConfig) {
+    ScriptingHandler::ScriptingHandler(config::Config *pConfig, log::LogHandler *pLogHandler) : _config(pConfig), _logHandler(pLogHandler) {
         initialize();
     }
 
@@ -32,10 +32,13 @@ namespace scripting {
     }
 
 
-    bool ScriptingHandler::do_run_file(const char* filename) {
+    bool ScriptingHandler::execute(const char* filename, const char* scriptinglanguage) {
         for(auto elem: scriptengines) {
-            if(elem.name == "libcubescript") {
-                return static_cast<LibCubeScript*>(elem.scriptenginehnd)->do_run_file(filename);
+            if(elem.name == scriptinglanguage) {
+                bool result = static_cast<LibCubeScript*>(elem.scriptenginehnd)->execute(filename);
+                if(!result) {
+                    _logHandler->log(log::LogLevel::Error, utils::StringHelper::vFormat("could not read \"%s\"", filename));
+                }
             }
         }
         return false;

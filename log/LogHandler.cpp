@@ -3,6 +3,7 @@
 //
 
 #include "LogHandler.h"
+#include "loggers/FileLogger.h"
 
 namespace log {
     LogHandler::LogHandler(config::Config *pConfig) : _config(pConfig) {
@@ -13,7 +14,7 @@ namespace log {
         deinitialize();
     }
 
-    void LogHandler::log(int loglevel, const std::string &text) {
+    void LogHandler::log(LogLevel loglevel, const std::string& text) {
         messageQueue.push(std::pair(loglevel, text));
         _process = true;
         _cv.notify_one();
@@ -56,7 +57,7 @@ namespace log {
                 while (!messageQueue.empty()) {
                     auto entry = messageQueue.pop();
                     for (auto const &obj : _logger) {
-                        obj->log(entry.first, &entry.second);
+                        obj->log(entry.first, entry.second);
                     }
                 }
             }

@@ -11,8 +11,9 @@
 #include <condition_variable>
 #include <thread>
 #include "../config/Config.h"
-#include "loggers/FileLogger.h"
+#include "Logger.h"
 #include "../utils/LockedQueue.h"
+
 
 namespace log {
 
@@ -23,7 +24,7 @@ namespace log {
         ~LogHandler();
         std::thread run();
         void stop();
-        void log(int loglevel, const std::string &text);
+        void log(log::LogLevel loglevel, const std::string& text);
 
     private:
         config::Config *_config;
@@ -33,7 +34,7 @@ namespace log {
         std::condition_variable _cv;
         bool _stop = false;
         bool _process = false;
-        utils::LockedQueue<std::pair<int, std::string>> messageQueue;
+        utils::LockedQueue<std::pair<LogLevel, std::string>> messageQueue;
 
         void initialize();
         void deinitialize();

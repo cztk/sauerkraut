@@ -13,14 +13,21 @@ int main(int argc, char **argv) {
 
     config::Config config{};
 
+    auto *logHandler = new log::LogHandler(&config);
+    auto scriptingHandler = new scripting::ScriptingHandler(&config, logHandler);
+
     config.parseImportantArgs(argc, argv);
+
+    // TODO bind vars before running first script
+    scriptingHandler->execute("init.cfg", "libcubescript");
+
 
     config.parseArgs(argc, argv);
 
-    auto *logHandler = new log::LogHandler(&config);
+
     auto logHandlerThread = logHandler->run();
 
-    auto scriptingHandler = new scripting::ScriptingHandler(&config);
+
 
 
 

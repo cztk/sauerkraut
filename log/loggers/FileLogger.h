@@ -25,7 +25,7 @@ namespace log {
 
         void deinit() override;
 
-        virtual void log(int loglevel, const std::string *text);
+        virtual void log(LogLevel loglevel, const std::string &text);
 
     private:
         FILE *_logFile{};
