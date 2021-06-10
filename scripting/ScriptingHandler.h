@@ -20,6 +20,11 @@ namespace scripting {
         explicit ScriptingHandler(config::Config *pConfig);
         ~ScriptingHandler();
 
+        bool do_run_file(const char* filename);
+        void bind_var(const char *varname, float *var, bool readonly);
+        void bind_var(const char *varname, int *var, bool readonly);
+        void bind_var(const char *varname, std::string *var, bool readonly);
+
     private:
         config::Config *_config;
 

@@ -17,11 +17,11 @@ namespace scripting {
     public:
         LibCubeScript();
         ~LibCubeScript();
-        bool do_run_file(cubescript::state &s, const char* filename);
+        bool do_run_file(const char* filename);
 
         void bind_var(const char *varname, float *var, bool readonly);
         void bind_var(const char *varname, int *var, bool readonly);
-        void bind_var(const char *varname, std::string_view *var, bool readonly);
+        void bind_var(const char *varname, std::string *var, bool readonly);
     private:
         cubescript::state cubescript_state;
 

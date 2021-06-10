@@ -13,12 +13,12 @@ namespace scripting {
 
     }
 
-    bool LibCubeScript::do_run_file(cubescript::state &s, const char* filename) {
+    bool LibCubeScript::do_run_file(const char* filename) {
         std::ostringstream buf;
         std::ifstream input (filename);
         buf << input.rdbuf();
 
-        s.compile(std::string_view{buf.str().c_str(), std::size_t(buf.str().size())}, filename).call(s);
+        cubescript_state.compile(std::string_view{buf.str().c_str(), std::size_t(buf.str().size())}, filename).call(cubescript_state);
         return true;
     }
 
@@ -31,7 +31,7 @@ namespace scripting {
         cubescript_state.new_var(varname, *var, readonly);
         cubescript_state.set_var_ptr(varname, var);
     }
-    void LibCubeScript::bind_var(const char *varname, std::string_view *var, bool readonly) {
+    void LibCubeScript::bind_var(const char *varname, std::string *var, bool readonly) {
         cubescript_state.new_var(varname, *var, readonly);
         cubescript_state.set_var_ptr(varname, var);
     }
