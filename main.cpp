@@ -9,7 +9,7 @@ int main(int argc, char **argv) {
 
     config::Config config{};
 
-    auto *logHandler = new log::LogHandler();
+    auto logHandler = new log::LogHandler();
     auto logHandlerThread = logHandler->run();
     config.setlogHandler(logHandler);
     auto scriptingHandler = new scripting::ScriptingHandler(&config, logHandler);
@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
 
     config.addScriptingLanguageConfig("libcubescript", "main");
 
-    config::ScriptingLangConfig *libcubescript_main_config = config.getScriptingLanguageConfig("libcubescript", "main");
+    auto libcubescript_main_config = config.getScriptingLanguageConfig("libcubescript", "main");
     scriptingHandler->initialize(libcubescript_main_config);
     scriptingHandler->execute("libcubescript", "main", "init.cfg");
 

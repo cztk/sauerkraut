@@ -46,10 +46,15 @@ namespace scripting {
         std::unique_lock<std::mutex> lock(_scriptengines_mutex);
         for(const auto& elem: scriptengines) {
             if(elem.config->scriptinglanguage == scriptinglanguage && env == elem.config->env) {
+                if(0 == elem.config->allow_execute) {
+                    _logHandler->log(log::LogLevel::Error, utils::StringHelper::vFormat("Not allowed to execute \"%s\" for %s in env %s", filename, scriptinglanguage, env));
+                    return false;
+                }
                 bool result = static_cast<LibCubeScript*>(elem.scriptenginehnd)->execute(filename);
                 if(!result) {
-                    _logHandler->log(log::LogLevel::Error, utils::StringHelper::vFormat("could not read \"%s\"", filename));
+                    _logHandler->log(log::LogLevel::Error, utils::StringHelper::vFormat("could not execute \"%s\"", filename));
                 }
+                return result;
             }
         }
         return false;
