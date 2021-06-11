@@ -3,10 +3,9 @@
 //
 
 #include "LogHandler.h"
-#include "loggers/FileLogger.h"
 
 namespace log {
-    LogHandler::LogHandler() = default;
+    LogHandler::LogHandler() = default;;
 
     LogHandler::~LogHandler() {
         deinitialize();
@@ -21,11 +20,18 @@ namespace log {
     void LogHandler::initialize(config::ConfigSection loggerconf) {
         // TODO: something reflection like implementation
         std::unique_lock<std::mutex> lock(_logger_mutex);
-            if ("FileLogger" == loggerconf.name) {
-                auto *actlogger = new FileLogger(&loggerconf);
-                actlogger->init();
-                _logger.push_back(actlogger);
-            }
+        if ("FileLogger" == loggerconf.name) {
+            auto *actlogger = new FileLogger(&loggerconf);
+            actlogger->init();
+            _logger.push_back(actlogger);
+            return;
+        }
+        if ("OutLogger" == loggerconf.name) {
+            auto *actlogger = new OutLogger(&loggerconf);
+            actlogger->init();
+            _logger.push_back(actlogger);
+            return;
+        }
     }
 
     void LogHandler::deinitialize() {
@@ -51,6 +57,7 @@ namespace log {
             if (!messageQueue.empty()) {
                 while (!messageQueue.empty()) {
                     auto entry = messageQueue.pop();
+                    std::unique_lock<std::mutex> lock(_logger_mutex);
                     for (auto const &obj : _logger) {
                         obj->log(entry.first, entry.second);
                     }

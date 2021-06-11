@@ -7,7 +7,7 @@
 
 
 #include "../Logger.h"
-#include "../../config/Config.h"
+#include "../../config/ConfigSection.h"
 
 namespace log {
 

@@ -119,10 +119,18 @@ void config::Config::parseImportantArgs(int argc, char **argv) {
     ConfigSection applicationLog{};
     applicationLog.name = "FileLogger";
     applicationLog.options.emplace_back(std::pair("filename", homedir + std::filesystem::path::preferred_separator + logfile));
-
+    _loghandler->initialize(applicationLog);
     logger.push_back(applicationLog);
 }
 
 void config::Config::setlogHandler(log::LogHandler *pHandler) {
+
+    _loghandler = pHandler;
+
+    ConfigSection applicationLog{};
+    applicationLog.name = "OutLogger";
+    _loghandler->initialize(applicationLog);
+    logger.push_back(applicationLog);
+
     _loghandler = pHandler;
 }

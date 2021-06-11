@@ -14,6 +14,9 @@
 #include "../utils/LockedQueue.h"
 #include "../config/ConfigSection.h"
 
+#include "loggers/FileLogger.h"
+#include "loggers/OutLogger.h"
+
 
 namespace log {
 
