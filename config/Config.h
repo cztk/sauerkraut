@@ -31,7 +31,7 @@ namespace config {
         int maxclients = 12;
         std::string serverip = "127.0.0.1";
         int serverport = 28785;
-        std::string mastername = "";
+        std::string mastername;
         int updatemaster = 0;
     };
 

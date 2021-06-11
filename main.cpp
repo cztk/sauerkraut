@@ -16,7 +16,8 @@ int main(int argc, char **argv) {
     config.parseImportantArgs(argc, argv);
     // TODO bind vars before running first script
 
-    scriptingHandler->execute("init.cfg", "libcubescript");
+    scriptingHandler->initialize("libcubescript", "main");
+    scriptingHandler->execute("libcubescript", "main", "init.cfg");
     config.parseArgs(argc, argv);
 
 
