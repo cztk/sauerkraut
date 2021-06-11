@@ -10,7 +10,7 @@
 #include <vector>
 #include <getopt.h>
 #include <filesystem>
-#include "../engine/engine.h"
+#include "../engine/state.h"
 #include "ConfigSection.h"
 #include "../log/LogHandler.h"
 #include "../utils/stringhelper.h"

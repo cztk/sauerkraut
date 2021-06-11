@@ -2,8 +2,8 @@
 // Created by ztk on 2021-06-09.
 //
 
-#ifndef SAUERKRAUT_LOGGER_H
-#define SAUERKRAUT_LOGGER_H
+#ifndef SAUERKRAUT_ILOGGER_H
+#define SAUERKRAUT_ILOGGER_H
 
 #include <string>
 
@@ -20,7 +20,7 @@ namespace kraut::log {
         Trace = 0
     };
 
-    class Logger {
+    class iLogger {
     public:
         virtual void init() = 0;
 
@@ -28,8 +28,8 @@ namespace kraut::log {
 
         virtual void log(LogLevel loglevel, const std::string &text) = 0;
 
-        virtual ~Logger() = default;
+        virtual ~iLogger() = default;
     };
 
 }
-#endif //SAUERKRAUT_LOGGER_H
+#endif //SAUERKRAUT_ILOGGER_H

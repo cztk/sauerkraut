@@ -5,11 +5,9 @@
 #include "LogHandler.h"
 
 namespace kraut::log {
-    LogHandler::LogHandler() = default;;
+    LogHandler::LogHandler() = default;
 
-    LogHandler::~LogHandler() {
-        deinitialize();
-    }
+    LogHandler::~LogHandler() = default;
 
     void LogHandler::log(LogLevel loglevel, const std::string &text) {
         messageQueue.push(std::pair(loglevel, text));
@@ -66,6 +64,7 @@ namespace kraut::log {
             _process = false;
             lk.unlock();
         }
+        deinitialize();
 
     }
 

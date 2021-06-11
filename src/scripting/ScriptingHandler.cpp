@@ -13,7 +13,7 @@ namespace kraut::scripting {
     }
 
     ScriptingHandler::~ScriptingHandler() {
-        deinitialize();
+
     }
 
     void ScriptingHandler::initialize(config::ScriptingLangConfig *scriptingLangConfig) {
@@ -46,6 +46,7 @@ namespace kraut::scripting {
     }
 
 
+    // TODO message queue with stuff to execute
     bool ScriptingHandler::execute(const char *scriptinglanguage, const char *env, const char *filename) {
         std::unique_lock<std::mutex> lock(_scriptengines_mutex);
         for (const auto &elem: scriptengines) {
@@ -113,6 +114,7 @@ namespace kraut::scripting {
             _process = false;
             lk.unlock();
         }
+        deinitialize();
 
     }
 

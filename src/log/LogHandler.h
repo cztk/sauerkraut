@@ -10,7 +10,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <thread>
-#include "Logger.h"
+#include "iLogger.h"
 #include "../utils/LockedQueue.h"
 #include "../config/ConfigSection.h"
 
@@ -25,17 +25,14 @@ namespace kraut::log {
         explicit LogHandler();
 
         ~LogHandler();
-
         std::thread run();
-
         void stop();
-
         void initialize(config::ConfigSection loggerconf);
 
-        void log(log::LogLevel loglevel, const std::string &text);
+        void log(LogLevel loglevel, const std::string &text);
 
     private:
-        std::vector<Logger *> _logger;
+        std::vector<iLogger *> _logger;
         std::mutex _logger_mutex;
         std::mutex _main_mutex;
         std::condition_variable _cv;

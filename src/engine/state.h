@@ -4,7 +4,17 @@
 
 #ifndef SAUERKRAUT_STATE_H
 #define SAUERKRAUT_STATE_H
+
+
 namespace kraut::engine {
+
+    enum {
+        NOT_INITING = 0,
+        INIT_GAME,
+        INIT_LOAD,
+        INIT_RESET
+    };
+
     class State {
 
     public:

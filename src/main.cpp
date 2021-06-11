@@ -2,11 +2,11 @@
 #include "log/LogHandler.h"
 #include "scripting/ScriptingHandler.h"
 #include "engine/state.h"
+#include "engine/hal/HalHandler.h"
 
 int main(int argc, char **argv) {
 
     kraut::config::Config config{};
-
     auto logHandler = new kraut::log::LogHandler();
     auto logHandlerThread = logHandler->run();
     config.setlogHandler(logHandler);
@@ -17,6 +17,7 @@ int main(int argc, char **argv) {
     auto scriptingHandlerThread = scriptingHandler->run();
 
     auto engine_state = new kraut::engine::State();
+    kraut::config::ScriptingLangConfig *libcubescript_main_config = nullptr;
 
     engine_state->initing = kraut::engine::INIT_RESET;
 
@@ -25,7 +26,7 @@ int main(int argc, char **argv) {
 
     logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("Starting libcubescript engine"));
     config.addScriptingLanguageConfig("libcubescript", "main");
-    auto libcubescript_main_config = config.getScriptingLanguageConfig("libcubescript", "main");
+    libcubescript_main_config = config.getScriptingLanguageConfig("libcubescript", "main");
     libcubescript_main_config->allow_execute = 1;
     scriptingHandler->initialize(libcubescript_main_config);
     scriptingHandler->execute("libcubescript", "main", "init.cfg");
@@ -40,10 +41,6 @@ int main(int argc, char **argv) {
 #endif
     engine_state->initing = kraut::engine::NOT_INITING;
 
-    if (config.dedicated <= 1) {
-        logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: screen"));
-
-    }
 
 
     scriptingHandler->stop();

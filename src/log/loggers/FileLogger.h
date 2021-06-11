@@ -6,12 +6,12 @@
 #define SAUERKRAUT_FILELOGGER_H
 
 
-#include "../Logger.h"
+#include "../iLogger.h"
 #include "../../config/ConfigSection.h"
 
 namespace kraut::log {
 
-    class FileLogger : public Logger {
+    class FileLogger : public iLogger {
 
         struct FileLoggerConfig {
             std::string filename;
@@ -25,7 +25,7 @@ namespace kraut::log {
 
         void deinit() override;
 
-        virtual void log(LogLevel loglevel, const std::string &text);
+        void log(LogLevel loglevel, const std::string &text) override;
 
     private:
         FILE *_logFile{};

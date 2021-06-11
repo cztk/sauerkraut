@@ -8,7 +8,7 @@
 #include <iostream>
 
 #include "../../config/ConfigSection.h"
-#include "../Logger.h"
+#include "../iLogger.h"
 
 namespace kraut::log {
 
@@ -17,7 +17,7 @@ namespace kraut::log {
         return static_cast<typename std::underlying_type<Enumeration>::type>(value);
     }
 
-    class OutLogger : public Logger {
+    class OutLogger : public iLogger {
 
         struct OutLoggerConfig {
 

@@ -16,7 +16,7 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 
 
-add_executable(sauerkraut main.cpp config/Config.h config/Config.cpp log/Logger.h log/LogHandler.h log/LogHandler.cpp log/loggers/FileLogger.h log/loggers/FileLogger.cpp utils/LockedQueue.h engine/engine.h utils/FileSystem.h scripting/ScriptingHandler.cpp scripting/ScriptingHandler.h scripting/bindings/LibCubeScript.cpp scripting/bindings/LibCubeScript.h utils/stringhelper.h config/ConfigSection.h engine/screen.h engine/screen.cpp engine/state.h log/loggers/OutLogger.cpp log/loggers/OutLogger.h)
+add_executable(sauerkraut main.cpp config/Config.h config/Config.cpp log/iLogger.h log/LogHandler.h log/LogHandler.cpp log/loggers/FileLogger.h log/loggers/FileLogger.cpp utils/LockedQueue.h engine/engine.h engine/engine.cpp utils/FileSystem.h scripting/ScriptingHandler.cpp scripting/ScriptingHandler.h scripting/bindings/LibCubeScript.cpp scripting/bindings/LibCubeScript.h utils/stringhelper.h config/ConfigSection.h engine/screen.h engine/screen.cpp engine/state.h log/loggers/OutLogger.cpp log/loggers/OutLogger.h engine/hal/HalHandler.cpp engine/hal/HalHandler.h engine/hal/handler/Sdl2Handler.cpp engine/hal/handler/Sdl2Handler.h engine/hal/iHandler.h)
 target_include_directories(sauerkraut PUBLIC "/usr/local/include/cubescript")
 target_link_directories(sauerkraut PUBLIC "/usr/local/lib/x86_64-linux-gnu")
 target_link_libraries(sauerkraut cubescript SDL2main SDL2)
