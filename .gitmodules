@@ -1,3 +1,6 @@
 [submodule "src/sub/libcubescript"]
 	path = src/sub/libcubescript
 	url = https://github.com/cztk/libcubescript
+[submodule "src/sub/enet"]
+	path = src/sub/enet
+	url = git@github.com:cztk/enet.git
