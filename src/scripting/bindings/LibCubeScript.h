@@ -5,7 +5,7 @@
 #ifndef SAUERKRAUT_CUBESCRIPT_H
 #define SAUERKRAUT_CUBESCRIPT_H
 
-#include <cubescript/cubescript.hh>
+#include "../../sub/libcubescript/include/cubescript/cubescript.hh"
 #include <fstream>
 #include <sstream>
 

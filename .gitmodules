@@ -1,0 +1,3 @@
+[submodule "src/sub/libcubescript"]
+	path = src/sub/libcubescript
+	url = https://github.com/cztk/libcubescript
