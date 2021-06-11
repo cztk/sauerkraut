@@ -4,8 +4,7 @@
 
 #ifndef SAUERKRAUT_SCREEN_H
 #define SAUERKRAUT_SCREEN_H
-
-namespace engine {
+namespace kraut::engine {
 
     static int SCREEN_MINW = 320;
     static int SCREEN_MINH = 200;
@@ -17,7 +16,6 @@ namespace engine {
     public:
 
     };
-
 }
 
 #endif //SAUERKRAUT_SCREEN_H

@@ -13,8 +13,10 @@
 #include "../engine/engine.h"
 #include "ConfigSection.h"
 #include "../log/LogHandler.h"
+#include "../utils/stringhelper.h"
+#include "../engine/screen.h"
 
-namespace config {
+namespace kraut::config {
 
     struct EngineConfig {
         std::vector<std::string> packagedirs;
@@ -26,7 +28,6 @@ namespace config {
     };
 
     struct ServerConfig {
-        int dedicated = 0;
         int serveruprate = 0;
         int maxclients = 12;
         std::string serverip = "127.0.0.1";
@@ -53,6 +54,7 @@ namespace config {
         std::vector<ScriptingLangConfig> _scriptinglangconfigvec;
         std::string homedir;
         std::string initscript;
+        int dedicated = 0;
 
         EngineConfig engine{};
         ServerConfig server{};
@@ -60,15 +62,17 @@ namespace config {
 
 
         void parseArgs(int argc, char **argv);
+
         void parseImportantArgs(int argc, char **argv);
-        void setlogHandler(krautlog::LogHandler *pHandler);
+
+        void setlogHandler(log::LogHandler *pHandler);
 
         void addScriptingLanguageConfig(const char *scriptlanguage, const char *env);
 
         ScriptingLangConfig *getScriptingLanguageConfig(const char *scriptinglanguage, const char *env);
 
     private:
-        krautlog::LogHandler *_loghandler = nullptr;
+        log::LogHandler *_loghandler = nullptr;
         std::mutex _scriptinglangconfigvec_mutex;
     };
 }

@@ -9,23 +9,29 @@
 #include <fstream>
 #include <sstream>
 
-namespace scripting {
+namespace kraut::scripting {
 
 
     class LibCubeScript {
 
     public:
         LibCubeScript();
+
         ~LibCubeScript();
-        bool execute(const char* filename);
+
+        bool execute(const char *filename);
 
         void bind_var(const char *varname, float *var, bool readonly);
+
         void bind_var(const char *varname, int *var, bool readonly);
+
         void bind_var(const char *varname, std::string *var, bool readonly);
+
     private:
         cubescript::state cubescript_state;
 
         void initialize();
+
         void deinitialize();
     };
 

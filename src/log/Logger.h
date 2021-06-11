@@ -7,10 +7,10 @@
 
 #include <string>
 
-namespace krautlog {
+namespace kraut::log {
 
-    enum class LogLevel
-    {
+
+    enum class LogLevel {
         None = 6,
         Critical = 5,
         Error = 4,

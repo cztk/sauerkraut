@@ -4,19 +4,15 @@
 
 #ifndef SAUERKRAUT_STATE_H
 #define SAUERKRAUT_STATE_H
-
-namespace engine {
+namespace kraut::engine {
     class State {
 
     public:
         int initing = INIT_RESET;
-        int numcpus = 1;
-
-
+        unsigned int numcpus = 1;
 
 
     };
 }
-
 
 #endif //SAUERKRAUT_STATE_H

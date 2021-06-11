@@ -4,7 +4,7 @@
 
 #ifndef SAUERKRAUT_ENGINE_H
 #define SAUERKRAUT_ENGINE_H
-namespace engine {
+namespace kraut::engine {
     enum {
         NOT_INITING = 0,
         INIT_GAME,

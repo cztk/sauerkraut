@@ -9,7 +9,7 @@
 #include "../Logger.h"
 #include "../../config/ConfigSection.h"
 
-namespace krautlog {
+namespace kraut::log {
 
     class FileLogger : public Logger {
 
@@ -39,5 +39,4 @@ namespace krautlog {
     };
 
 }
-
 #endif //SAUERKRAUT_FILELOGGER_H

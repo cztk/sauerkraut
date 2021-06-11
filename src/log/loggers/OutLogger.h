@@ -10,14 +10,12 @@
 #include "../../config/ConfigSection.h"
 #include "../Logger.h"
 
-// TODO configure stdout/stderr/(other stream?) as out
+namespace kraut::log {
 
-template <typename Enumeration>
-auto as_integer(Enumeration const value)-> typename std::underlying_type<Enumeration>::type {
-    return static_cast<typename std::underlying_type<Enumeration>::type>(value);
-}
-
-namespace krautlog {
+    template<typename Enumeration>
+    auto as_integer(Enumeration const value) -> typename std::underlying_type<Enumeration>::type {
+        return static_cast<typename std::underlying_type<Enumeration>::type>(value);
+    }
 
     class OutLogger : public Logger {
 
@@ -46,6 +44,5 @@ namespace krautlog {
     };
 
 }
-
 
 #endif //SAUERKRAUT_OUTLOGGER_H

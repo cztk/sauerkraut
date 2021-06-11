@@ -37,7 +37,7 @@ namespace utils {
             std::vector<char> zc(iLen + 1);
             std::vsnprintf(zc.data(), zc.size(), zcFormat, vaArgs);
             va_end(vaArgs);
-            return std::string(zc.data(), zc.size()-1);
+            return std::string(zc.data(), zc.size() - 1);
         }
     };
 }

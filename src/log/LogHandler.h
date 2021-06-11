@@ -17,18 +17,22 @@
 #include "loggers/FileLogger.h"
 #include "loggers/OutLogger.h"
 
-
-namespace krautlog {
+namespace kraut::log {
 
     class LogHandler {
 
     public:
         explicit LogHandler();
+
         ~LogHandler();
+
         std::thread run();
+
         void stop();
+
         void initialize(config::ConfigSection loggerconf);
-        void log(krautlog::LogLevel loglevel, const std::string& text);
+
+        void log(log::LogLevel loglevel, const std::string &text);
 
     private:
         std::vector<Logger *> _logger;
@@ -38,11 +42,11 @@ namespace krautlog {
         bool _stop = false;
         bool _process = false;
         utils::LockedQueue<std::pair<LogLevel, std::string>> messageQueue;
+
         void deinitialize();
 
         void thread_main();
     };
 
 }
-
 #endif //SAUERKRAUT_LOGHANDLER_H

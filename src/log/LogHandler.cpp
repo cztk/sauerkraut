@@ -4,14 +4,14 @@
 
 #include "LogHandler.h"
 
-namespace krautlog {
+namespace kraut::log {
     LogHandler::LogHandler() = default;;
 
     LogHandler::~LogHandler() {
         deinitialize();
     }
 
-    void LogHandler::log(LogLevel loglevel, const std::string& text) {
+    void LogHandler::log(LogLevel loglevel, const std::string &text) {
         messageQueue.push(std::pair(loglevel, text));
         _process = true;
         _cv.notify_one();

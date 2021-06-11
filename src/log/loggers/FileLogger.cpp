@@ -4,7 +4,7 @@
 
 #include "FileLogger.h"
 
-namespace krautlog {
+namespace kraut::log {
 
     FileLogger::FileLogger(config::ConfigSection *pConfigSection) : _configSection(pConfigSection) {
 

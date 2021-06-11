@@ -1,56 +1,58 @@
-#include <SDL2/SDL.h>
-
 #include "config/Config.h"
 #include "log/LogHandler.h"
 #include "scripting/ScriptingHandler.h"
 #include "engine/state.h"
 
-
 int main(int argc, char **argv) {
 
-    config::Config config{};
+    kraut::config::Config config{};
 
-    auto logHandler = new krautlog::LogHandler();
+    auto logHandler = new kraut::log::LogHandler();
     auto logHandlerThread = logHandler->run();
     config.setlogHandler(logHandler);
-    auto scriptingHandler = new scripting::ScriptingHandler(&config, logHandler);
+#ifdef KRAUT_LOG_TRACE
+    logHandler->log(log::LogLevel::Trace, utils::StringHelper::vFormat("Starting scripting handler"));
+#endif
+    auto scriptingHandler = new kraut::scripting::ScriptingHandler(&config, logHandler);
     auto scriptingHandlerThread = scriptingHandler->run();
 
-    auto engine_state = new engine::State();
+    auto engine_state = new kraut::engine::State();
 
-    engine_state->initing = engine::INIT_RESET;
+    engine_state->initing = kraut::engine::INIT_RESET;
 
     config.parseImportantArgs(argc, argv);
     // TODO bind vars before running first script
 
-    logHandler->log(krautlog::LogLevel::Info, utils::StringHelper::vFormat("Starting libcubescript engine"));
-
+    logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("Starting libcubescript engine"));
     config.addScriptingLanguageConfig("libcubescript", "main");
-
     auto libcubescript_main_config = config.getScriptingLanguageConfig("libcubescript", "main");
     libcubescript_main_config->allow_execute = 1;
     scriptingHandler->initialize(libcubescript_main_config);
     scriptingHandler->execute("libcubescript", "main", "init.cfg");
-
-    logHandler->log(krautlog::LogLevel::Debug, utils::StringHelper::vFormat("Parse args"));
+#ifdef KRAUT_LOG_DEBUG
+    logHandler->log(log::LogLevel::Debug, utils::StringHelper::vFormat("Parse args"));
+#endif
     config.parseArgs(argc, argv);
 
-    engine_state->numcpus = std::clamp(SDL_GetCPUCount(), 1, 96);
+    engine_state->numcpus = std::clamp(std::thread::hardware_concurrency(), 1u, 96u);
+#ifdef KRAUT_LOG_DEBUG
+    logHandler->log(log::LogLevel::Debug, utils::StringHelper::vFormat("found number of cores: %l", engine_state->numcpus));
+#endif
+    engine_state->initing = kraut::engine::NOT_INITING;
 
-    engine_state->initing = engine::NOT_INITING;
+    if (config.dedicated <= 1) {
+        logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: screen"));
 
-
-
-
+    }
 
 
     scriptingHandler->stop();
-    if(scriptingHandlerThread.joinable()) {
+    if (scriptingHandlerThread.joinable()) {
         scriptingHandlerThread.join();
     }
 
     logHandler->stop();
-    if(logHandlerThread.joinable()) {
+    if (logHandlerThread.joinable()) {
         logHandlerThread.join();
     }
 

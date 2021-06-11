@@ -10,31 +10,38 @@
 #include "../log/LogHandler.h"
 #include "../utils/stringhelper.h"
 
-namespace scripting {
+namespace kraut::scripting {
 
     struct supportedlanguage {
         config::ScriptingLangConfig *config;
-        void* scriptenginehnd;
+        void *scriptenginehnd;
     };
 
     class ScriptingHandler {
     public:
-        explicit ScriptingHandler(config::Config *pConfig, krautlog::LogHandler *pLogHandler);
+        explicit ScriptingHandler(config::Config *pConfig, log::LogHandler *pLogHandler);
+
         ~ScriptingHandler();
 
         std::thread run();
+
         void stop();
 
-        bool execute(const char* scriptinglanguage, const char* env, const char* filename);
-        void bind_var(const char* scriptinglanguage, const char* env, const char *varname, float *var, bool readonly);
-        void bind_var(const char* scriptinglanguage, const char* env, const char *varname, int *var, bool readonly);
-        void bind_var(const char* scriptinglanguage, const char* env, const char *varname, std::string *var, bool readonly);
+        bool execute(const char *scriptinglanguage, const char *env, const char *filename);
+
+        void
+        bind_var(const char *scriptinglanguage, const char *env, const char *varname, float *var, bool readonly);
+
+        void bind_var(const char *scriptinglanguage, const char *env, const char *varname, int *var, bool readonly);
+
+        void bind_var(const char *scriptinglanguage, const char *env, const char *varname, std::string *var,
+                      bool readonly);
 
         void initialize(config::ScriptingLangConfig *scriptingLangConfig);
 
     private:
         config::Config *_config;
-        krautlog::LogHandler *_logHandler;
+        log::LogHandler *_logHandler;
 
         std::vector<supportedlanguage> scriptengines;
         std::mutex _scriptengines_mutex;
@@ -44,9 +51,9 @@ namespace scripting {
         bool _process = false;
 
         void thread_main();
+
         void deinitialize();
     };
 
 }
-
 #endif //SAUERKRAUT_SCRIPTINGHANDLER_H

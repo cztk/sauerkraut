@@ -7,7 +7,8 @@
 
 #include <string>
 #include <vector>
-namespace config {
+
+namespace kraut::config {
     struct ConfigSection {
         std::string name;
         std::vector<std::pair<std::string, std::string>> options;
