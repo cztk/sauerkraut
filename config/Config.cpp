@@ -116,6 +116,8 @@ void config::Config::parseImportantArgs(int argc, char **argv) {
         logfile = "log.txt";
     }
 
+    _loghandler->log(log::LogLevel::Info, utils::StringHelper::vFormat("Using log file: %s%c%s", homedir.c_str(), std::filesystem::path::preferred_separator , logfile.c_str()));
+
     ConfigSection applicationLog{};
     applicationLog.name = "FileLogger";
     applicationLog.options.emplace_back(std::pair("filename", homedir + std::filesystem::path::preferred_separator + logfile));
@@ -133,4 +135,25 @@ void config::Config::setlogHandler(log::LogHandler *pHandler) {
     logger.push_back(applicationLog);
 
     _loghandler = pHandler;
+}
+
+void config::Config::addScriptingLanguageConfig(const char *scriptlanguage, const char *env) {
+    std::unique_lock<std::mutex> lk(_scriptinglangconfigvec_mutex);
+    ScriptingLangConfig scriptingLangConfig{};
+    scriptingLangConfig.scriptinglanguage = scriptlanguage;
+    scriptingLangConfig.env = env;
+    _scriptinglangconfigvec.push_back(scriptingLangConfig);
+
+}
+
+config::ScriptingLangConfig * config::Config::getScriptingLanguageConfig(const char *scriptinglanguage, const char *env) {
+    std::unique_lock<std::mutex> lk(_scriptinglangconfigvec_mutex);
+    auto result = std::find_if(
+            _scriptinglangconfigvec.begin(), _scriptinglangconfigvec.end(),
+            [scriptinglanguage, env](auto const &a) {
+                return (a.scriptinglanguage == scriptinglanguage && a.env == env);
+            });
+    if (result == _scriptinglangconfigvec.end()) {
+        return nullptr;
+    } else return &(*result);
 }

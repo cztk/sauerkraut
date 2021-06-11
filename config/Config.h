@@ -40,9 +40,17 @@ namespace config {
         std::string firstmap;
     };
 
+    struct ScriptingLangConfig {
+        std::string scriptinglanguage;
+        std::string env;
+        int allow_execute = 0;
+
+    };
+
     class Config {
     public:
         std::vector<ConfigSection> logger;
+        std::vector<ScriptingLangConfig> _scriptinglangconfigvec;
         std::string homedir;
         std::string initscript;
 
@@ -54,8 +62,14 @@ namespace config {
         void parseArgs(int argc, char **argv);
         void parseImportantArgs(int argc, char **argv);
         void setlogHandler(log::LogHandler *pHandler);
+
+        void addScriptingLanguageConfig(const char *scriptlanguage, const char *env);
+
+        ScriptingLangConfig *getScriptingLanguageConfig(const char *scriptinglanguage, const char *env);
+
     private:
         log::LogHandler *_loghandler = nullptr;
+        std::mutex _scriptinglangconfigvec_mutex;
     };
 }
 

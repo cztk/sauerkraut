@@ -13,8 +13,7 @@
 namespace scripting {
 
     struct supportedlanguage {
-        std::string name;
-        std::string env;
+        config::ScriptingLangConfig *config;
         void* scriptenginehnd;
     };
 
@@ -23,12 +22,15 @@ namespace scripting {
         explicit ScriptingHandler(config::Config *pConfig, log::LogHandler *pLogHandler);
         ~ScriptingHandler();
 
+        std::thread run();
+        void stop();
+
         bool execute(const char* scriptinglanguage, const char* env, const char* filename);
         void bind_var(const char* scriptinglanguage, const char* env, const char *varname, float *var, bool readonly);
         void bind_var(const char* scriptinglanguage, const char* env, const char *varname, int *var, bool readonly);
         void bind_var(const char* scriptinglanguage, const char* env, const char *varname, std::string *var, bool readonly);
 
-        void initialize(const char* scriptinglanguage, const char* env);
+        void initialize(config::ScriptingLangConfig *scriptingLangConfig);
 
     private:
         config::Config *_config;
@@ -36,8 +38,12 @@ namespace scripting {
 
         std::vector<supportedlanguage> scriptengines;
         std::mutex _scriptengines_mutex;
+        std::mutex _main_mutex;
+        std::condition_variable _cv;
+        bool _stop = false;
+        bool _process = false;
 
-
+        void thread_main();
         void deinitialize();
     };
 

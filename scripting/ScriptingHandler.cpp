@@ -13,18 +13,17 @@ namespace scripting {
         deinitialize();
     }
 
-    void ScriptingHandler::initialize(const char* scriptinglanguage, const char* env) {
+    void ScriptingHandler::initialize(config::ScriptingLangConfig *scriptingLangConfig) {
         std::unique_lock<std::mutex> lock(_scriptengines_mutex);
         for(const auto& elem: scriptengines) {
-            if(scriptinglanguage == elem.name && env == elem.env) {
+            if(scriptingLangConfig->scriptinglanguage == elem.config->scriptinglanguage && scriptingLangConfig->env == elem.config->env) {
                 return;
             }
         }
 
-        if(strncmp("libcubescript", scriptinglanguage, sizeof(*scriptinglanguage)) == 0) {
+        if("libcubescript" == scriptingLangConfig->scriptinglanguage) {
             supportedlanguage libCubeScriptSave{};
-            libCubeScriptSave.name = "libcubescript";
-            libCubeScriptSave.env = env;
+            libCubeScriptSave.config = scriptingLangConfig;
             libCubeScriptSave.scriptenginehnd = new LibCubeScript();
             scriptengines.push_back(libCubeScriptSave);
         }
@@ -35,7 +34,7 @@ namespace scripting {
     void ScriptingHandler::deinitialize() {
         std::unique_lock<std::mutex> lock(_scriptengines_mutex);
         for(const auto& elem: scriptengines) {
-            if(elem.name == "libcubescript") {
+            if(elem.config->scriptinglanguage == "libcubescript") {
                 delete static_cast<LibCubeScript*>(elem.scriptenginehnd);
             }
         }
@@ -46,7 +45,7 @@ namespace scripting {
     bool ScriptingHandler::execute(const char* scriptinglanguage, const char* env, const char* filename) {
         std::unique_lock<std::mutex> lock(_scriptengines_mutex);
         for(const auto& elem: scriptengines) {
-            if(elem.name == scriptinglanguage && env == elem.env) {
+            if(elem.config->scriptinglanguage == scriptinglanguage && env == elem.config->env) {
                 bool result = static_cast<LibCubeScript*>(elem.scriptenginehnd)->execute(filename);
                 if(!result) {
                     _logHandler->log(log::LogLevel::Error, utils::StringHelper::vFormat("could not read \"%s\"", filename));
@@ -59,7 +58,7 @@ namespace scripting {
     void ScriptingHandler::bind_var(const char* scriptinglanguage, const char* env, const char * varname, float *var, bool readonly) {
         std::unique_lock<std::mutex> lock(_scriptengines_mutex);
         for(const auto& elem: scriptengines) {
-            if(elem.name == "libcubescript" && elem.name == scriptinglanguage && elem.env == env) {
+            if(elem.config->scriptinglanguage == scriptinglanguage && env == elem.config->env) {
                 return static_cast<LibCubeScript*>(elem.scriptenginehnd)->bind_var(varname, var, readonly);
             }
         }
@@ -68,7 +67,7 @@ namespace scripting {
     void ScriptingHandler::bind_var(const char* scriptinglanguage, const char* env, const char * varname, int *var, bool readonly) {
         std::unique_lock<std::mutex> lock(_scriptengines_mutex);
         for(const auto& elem: scriptengines) {
-            if(elem.name == "libcubescript" && elem.name == scriptinglanguage && elem.env == env) {
+            if(elem.config->scriptinglanguage == scriptinglanguage && env == elem.config->env) {
                 return static_cast<LibCubeScript*>(elem.scriptenginehnd)->bind_var(varname, var, readonly);
             }
         }
@@ -77,9 +76,33 @@ namespace scripting {
     void ScriptingHandler::bind_var(const char* scriptinglanguage, const char* env, const char * varname, std::string *var, bool readonly) {
         std::unique_lock<std::mutex> lock(_scriptengines_mutex);
         for(const auto& elem: scriptengines) {
-            if(elem.name == "libcubescript" && elem.name == scriptinglanguage && elem.env == env) {
+            if(elem.config->scriptinglanguage == scriptinglanguage && env == elem.config->env) {
                 return static_cast<LibCubeScript*>(elem.scriptenginehnd)->bind_var(varname, var, readonly);
             }
+        }
+    }
+
+    std::thread ScriptingHandler::run() {
+        return std::thread([this] { this->thread_main(); });
+    }
+
+    void ScriptingHandler::thread_main() {
+
+        while (!_stop) {
+            std::unique_lock<std::mutex> lk(_main_mutex);
+            _cv.wait(lk, [this] { return _process || _stop; });
+
+
+            _process = false;
+            lk.unlock();
+        }
+
+    }
+
+    void ScriptingHandler::stop() {
+        {
+            _stop = true;
+            _cv.notify_one();
         }
     }
 
