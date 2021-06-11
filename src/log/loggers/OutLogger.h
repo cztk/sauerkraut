@@ -17,7 +17,7 @@ auto as_integer(Enumeration const value)-> typename std::underlying_type<Enumera
     return static_cast<typename std::underlying_type<Enumeration>::type>(value);
 }
 
-namespace log {
+namespace krautlog {
 
     class OutLogger : public Logger {
 

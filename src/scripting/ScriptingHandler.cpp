@@ -6,7 +6,7 @@
 
 namespace scripting {
 
-    ScriptingHandler::ScriptingHandler(config::Config *pConfig, log::LogHandler *pLogHandler) : _config(pConfig), _logHandler(pLogHandler) {
+    ScriptingHandler::ScriptingHandler(config::Config *pConfig, krautlog::LogHandler *pLogHandler) : _config(pConfig), _logHandler(pLogHandler) {
     }
 
     ScriptingHandler::~ScriptingHandler() {
@@ -47,12 +47,12 @@ namespace scripting {
         for(const auto& elem: scriptengines) {
             if(elem.config->scriptinglanguage == scriptinglanguage && env == elem.config->env) {
                 if(0 == elem.config->allow_execute) {
-                    _logHandler->log(log::LogLevel::Error, utils::StringHelper::vFormat("Not allowed to execute \"%s\" for %s in env %s", filename, scriptinglanguage, env));
+                    _logHandler->log(krautlog::LogLevel::Error, utils::StringHelper::vFormat("Not allowed to execute \"%s\" for %s in env %s", filename, scriptinglanguage, env));
                     return false;
                 }
                 bool result = static_cast<LibCubeScript*>(elem.scriptenginehnd)->execute(filename);
                 if(!result) {
-                    _logHandler->log(log::LogLevel::Error, utils::StringHelper::vFormat("could not execute \"%s\"", filename));
+                    _logHandler->log(krautlog::LogLevel::Error, utils::StringHelper::vFormat("could not execute \"%s\"", filename));
                 }
                 return result;
             }

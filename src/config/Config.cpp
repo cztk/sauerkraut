@@ -14,7 +14,7 @@ void config::Config::parseArgs(int argc, char **argv) {
             case 'q':
                 if(homedir[0]){
                     if(nullptr != _loghandler) {
-                        _loghandler->log(log::LogLevel::Info, utils::StringHelper::vFormat("Using home directory: %s", homedir.c_str()));
+                        _loghandler->log(krautlog::LogLevel::Info, utils::StringHelper::vFormat("Using home directory: %s", homedir.c_str()));
                     }
                 }
                 break;
@@ -22,7 +22,7 @@ void config::Config::parseArgs(int argc, char **argv) {
             break;
             case 'k':
             {
-                _loghandler->log(log::LogLevel::Info, utils::StringHelper::vFormat("Adding package directory: %s", optarg));
+                _loghandler->log(krautlog::LogLevel::Info, utils::StringHelper::vFormat("Adding package directory: %s", optarg));
                 engine.packagedirs.emplace_back(optarg);
                 break;
             }
@@ -32,7 +32,7 @@ void config::Config::parseArgs(int argc, char **argv) {
                 if(server.dedicated<=0){
                     server.dedicated = 2;
                 }
-                _loghandler->log(log::LogLevel::Debug, utils::StringHelper::vFormat("Setting dedicated to: %i", server.dedicated));
+                _loghandler->log(krautlog::LogLevel::Debug, utils::StringHelper::vFormat("Setting dedicated to: %i", server.dedicated));
                 break;
             case 'w':
                 engine.screen_w = std::clamp(atoi(optarg), engine::SCREEN_MINW, engine::SCREEN_MAXW);
@@ -111,12 +111,12 @@ void config::Config::parseImportantArgs(int argc, char **argv) {
         homedir = std::string( getenv("HOME") );
     }
 
-    // set log after home dir, but before anything else
+    // set krautlog after home dir, but before anything else
     if(!given_logfile) {
-        logfile = "log.txt";
+        logfile = "krautlog.txt";
     }
 
-    _loghandler->log(log::LogLevel::Info, utils::StringHelper::vFormat("Using log file: %s%c%s", homedir.c_str(), std::filesystem::path::preferred_separator , logfile.c_str()));
+    _loghandler->log(krautlog::LogLevel::Info, utils::StringHelper::vFormat("Using krautlog file: %s%c%s", homedir.c_str(), std::filesystem::path::preferred_separator , logfile.c_str()));
 
     ConfigSection applicationLog{};
     applicationLog.name = "FileLogger";
@@ -125,7 +125,7 @@ void config::Config::parseImportantArgs(int argc, char **argv) {
     logger.push_back(applicationLog);
 }
 
-void config::Config::setlogHandler(log::LogHandler *pHandler) {
+void config::Config::setlogHandler(krautlog::LogHandler *pHandler) {
 
     _loghandler = pHandler;
 

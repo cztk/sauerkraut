@@ -7,7 +7,7 @@
 
 #include <string>
 
-namespace log {
+namespace krautlog {
 
     enum class LogLevel
     {

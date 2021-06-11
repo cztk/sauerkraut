@@ -18,7 +18,7 @@
 #include "loggers/OutLogger.h"
 
 
-namespace log {
+namespace krautlog {
 
     class LogHandler {
 
@@ -28,7 +28,7 @@ namespace log {
         std::thread run();
         void stop();
         void initialize(config::ConfigSection loggerconf);
-        void log(log::LogLevel loglevel, const std::string& text);
+        void log(krautlog::LogLevel loglevel, const std::string& text);
 
     private:
         std::vector<Logger *> _logger;

@@ -19,7 +19,7 @@ namespace scripting {
 
     class ScriptingHandler {
     public:
-        explicit ScriptingHandler(config::Config *pConfig, log::LogHandler *pLogHandler);
+        explicit ScriptingHandler(config::Config *pConfig, krautlog::LogHandler *pLogHandler);
         ~ScriptingHandler();
 
         std::thread run();
@@ -34,7 +34,7 @@ namespace scripting {
 
     private:
         config::Config *_config;
-        log::LogHandler *_logHandler;
+        krautlog::LogHandler *_logHandler;
 
         std::vector<supportedlanguage> scriptengines;
         std::mutex _scriptengines_mutex;

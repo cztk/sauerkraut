@@ -9,7 +9,7 @@
 #include "../Logger.h"
 #include "../../config/ConfigSection.h"
 
-namespace log {
+namespace krautlog {
 
     class FileLogger : public Logger {
 

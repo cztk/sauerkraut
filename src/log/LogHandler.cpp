@@ -4,7 +4,7 @@
 
 #include "LogHandler.h"
 
-namespace log {
+namespace krautlog {
     LogHandler::LogHandler() = default;;
 
     LogHandler::~LogHandler() {

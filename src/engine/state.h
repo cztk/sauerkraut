@@ -10,6 +10,7 @@ namespace engine {
 
     public:
         int initing = INIT_RESET;
+        int numcpus = 1;
 
 
 

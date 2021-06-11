@@ -4,7 +4,7 @@
 
 #include "OutLogger.h"
 
-namespace log {
+namespace krautlog {
 
     OutLogger::OutLogger(config::ConfigSection *pConfigSection) : _configSection(pConfigSection) {
 
