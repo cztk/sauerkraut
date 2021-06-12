@@ -13,11 +13,17 @@ namespace kraut::engine {
         Engine::~Engine() = default;
 
         bool Engine::initialize() {
+            _state->initing =  kraut::engine::INITING;
+
             if (_config->dedicated <= 1) {
                 _logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: hal"));
                 engine_hal_hnd = new kraut::engine::hal::HalHandler(_state, _config, _logHandler);
                 engine_hal_thread = engine_hal_hnd->run();
             }
+
+            networkHandler = new network::NetworkHandler(_logHandler);
+            networkHandler->initialize();
+
             return true;
         }
 
@@ -29,5 +35,8 @@ namespace kraut::engine {
                 }
                 delete engine_hal_hnd;
             }
+
+            networkHandler->deinitialize();
+            delete networkHandler;
         }
 }

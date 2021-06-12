@@ -8,6 +8,7 @@
 #include "state.h"
 #include "../config/Config.h"
 #include "hal/HalHandler.h"
+#include "../network/NetworkHandler.h"
 
 namespace kraut::engine {
 
@@ -22,6 +23,8 @@ namespace kraut::engine {
         State *_state;
         config::Config *_config;
         log::LogHandler *_logHandler;
+
+        network::NetworkHandler *networkHandler;
 
         kraut::engine::hal::HalHandler *engine_hal_hnd = nullptr;
         std::thread engine_hal_thread;

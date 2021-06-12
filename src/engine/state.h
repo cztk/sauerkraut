@@ -10,6 +10,7 @@ namespace kraut::engine {
 
     enum {
         NOT_INITING = 0,
+        INITING,
         INIT_GAME,
         INIT_LOAD,
         INIT_RESET

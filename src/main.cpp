@@ -53,9 +53,8 @@ int main(int argc, char **argv) {
 
 
 
-        krautengine.deinitialize();
-
     }
+    krautengine.deinitialize();
 
 
 

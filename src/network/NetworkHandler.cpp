@@ -8,6 +8,7 @@ namespace kraut::network {
 
     bool NetworkHandler::initialize() {
         bool result = false;
+        _logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: net"));
         if(!initialize_enet()) {
             //TODO check deinit parts
             return false;
@@ -22,6 +23,14 @@ namespace kraut::network {
             result = true;
         }
         return result;
+    }
+
+    NetworkHandler::NetworkHandler(log::LogHandler *pLogHandler) : _logHandler(pLogHandler) {
+
+    }
+
+    void NetworkHandler::deinitialize() {
+        enet_deinitialize();
     }
 
 
