@@ -25,6 +25,8 @@ namespace kraut::config {
         int screen_depthbits = 24;
         int screen_fsaa = 0;
         int screen_fullscreen = 1;
+        int screen_fulldesktop = 0;
+        int curvsync = -1;
     };
 
     struct ServerConfig {

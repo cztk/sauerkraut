@@ -10,6 +10,12 @@ public:
     virtual bool init() = 0;
     virtual void deinit() = 0;
     virtual ~iHandler() = default;
+
+    virtual void grab_keyboard(bool b) = 0;
+
+    virtual void minimize_on_focus_loss(bool b) = 0;
+
+    virtual bool setupScreen() = 0;
 };
 
 #endif //SAUERKRAUT_IHANDLER_H

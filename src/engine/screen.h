@@ -10,6 +10,8 @@ namespace kraut::engine {
     static int SCREEN_MINH = 200;
     static int SCREEN_MAXW = 20000;
     static int SCREEN_MAXH = 20000;
+    static int SCREEN_DEFAULTW = 1024;
+    static int SCREEN_DEFAULTH = 768;
 
     class Screen {
 

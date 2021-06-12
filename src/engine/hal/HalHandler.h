@@ -24,6 +24,9 @@ namespace kraut::engine::hal {
         std::thread run();
         void stop();
         bool initialize();
+
+        void initVideo();
+
     private:
         State *_state;
         config::Config *_config;
@@ -39,6 +42,7 @@ namespace kraut::engine::hal {
 
         void deinitialize();
         void thread_main();
+
 
     };
 

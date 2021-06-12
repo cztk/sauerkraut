@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
     config.parseImportantArgs(argc, argv);
     // TODO bind vars before running first script
 
-    logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("Starting libcubescript engine"));
+    logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: libcubescript engine"));
     config.addScriptingLanguageConfig("libcubescript", "main");
     libcubescript_main_config = config.getScriptingLanguageConfig("libcubescript", "main");
     libcubescript_main_config->allow_execute = 1;
@@ -47,11 +47,11 @@ int main(int argc, char **argv) {
 
     if(krautengine.initialize()) {
 
-
-
-
-
-
+        if(config.dedicated <= 1) {
+            logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: client"));
+        } else {
+            logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: server"));
+        }
 
     }
     krautengine.deinitialize();

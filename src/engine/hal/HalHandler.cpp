@@ -42,11 +42,20 @@ namespace kraut::engine::hal {
         }
     }
 
+    void HalHandler::initVideo() {
+        _logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: hal:video"));
+
+        hardwareHandler->grab_keyboard(false);
+#if !defined(WIN32) && !defined(__APPLE__)
+        hardwareHandler->minimize_on_focus_loss(false);
+#endif
+        hardwareHandler->setupScreen();
+    }
+
+
     bool HalHandler::initialize() {
-        hardwareHandler = new sdl::Sdl2Handler(_logHandler);
-
+        hardwareHandler = new sdl::Sdl2Handler(_logHandler, _config);
         return hardwareHandler->init();
-
     }
 
     void HalHandler::deinitialize() {
