@@ -3,6 +3,7 @@
 #include "scripting/ScriptingHandler.h"
 #include "engine/state.h"
 #include "engine/hal/HalHandler.h"
+#include "engine/engine.h"
 
 int main(int argc, char **argv) {
 
@@ -40,6 +41,21 @@ int main(int argc, char **argv) {
     logHandler->log(log::LogLevel::Debug, utils::StringHelper::vFormat("found number of cores: %l", engine_state->numcpus));
 #endif
     engine_state->initing = kraut::engine::NOT_INITING;
+
+
+    kraut::engine::Engine krautengine(engine_state, &config, logHandler);
+
+    if(krautengine.initialize()) {
+
+
+
+
+
+
+
+        krautengine.deinitialize();
+
+    }
 
 
 

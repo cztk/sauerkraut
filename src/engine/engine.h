@@ -17,6 +17,7 @@ namespace kraut::engine {
         ~Engine();
 
         bool initialize();
+        void deinitialize();
     private:
         State *_state;
         config::Config *_config;
@@ -25,7 +26,7 @@ namespace kraut::engine {
         kraut::engine::hal::HalHandler *engine_hal_hnd = nullptr;
         std::thread engine_hal_thread;
 
-        void deinitialize();
+
     };
 }
 #endif //SAUERKRAUT_ENGINE_H
