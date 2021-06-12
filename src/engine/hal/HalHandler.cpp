@@ -43,7 +43,7 @@ namespace kraut::engine::hal {
     }
 
     bool HalHandler::initialize() {
-        hardwareHandler = new sdl::Sdl2Handler();
+        hardwareHandler = new sdl::Sdl2Handler(_logHandler);
 
         return hardwareHandler->init();
 

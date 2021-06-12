@@ -10,16 +10,17 @@
 #include "../../../utils/stringhelper.h"
 #include "../iHandler.h"
 #include "../../state.h"
+#include "../../../log/LogHandler.h"
 
 namespace kraut::engine::hal::sdl {
     class Sdl2Handler : public iHandler {
     public:
-        Sdl2Handler();
+        explicit Sdl2Handler(log::LogHandler *pLogHandler);
         bool init() override;
-        void deinit();
+        void deinit() override;
     private:
         int sdl_xgrab_bug = 0;
-        std::string last_error;
+        log::LogHandler *_logHandler;
     };
 }
 
