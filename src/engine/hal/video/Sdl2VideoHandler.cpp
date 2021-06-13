@@ -48,8 +48,9 @@ namespace kraut::engine::hal::video::sdl {
     }
 
 
-    Sdl2VideoHandler::Sdl2VideoHandler(log::LogHandler *pLogHandler, kraut::config::Config *pConfig) : _logHandler(pLogHandler),
-                                                                                             _config(pConfig) {
+    Sdl2VideoHandler::Sdl2VideoHandler(log::LogHandler *pLogHandler, kraut::config::Config *pConfig) : _logHandler(
+            pLogHandler),
+                                                                                                       _config(pConfig) {
 
     }
 

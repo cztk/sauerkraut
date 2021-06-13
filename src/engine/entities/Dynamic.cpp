@@ -6,26 +6,22 @@
 
 namespace kraut::engine::entities {
 
-    Dynamic::Dynamic() : ragdoll(nullptr), query(nullptr), lastrendered(0), occluded(0)
-    {
+    Dynamic::Dynamic() : ragdoll(nullptr), query(nullptr), lastrendered(0), occluded(0) {
         reset();
     }
 
-    Dynamic::~Dynamic()
-    {
-        if(ragdoll) {
+    Dynamic::~Dynamic() {
+        if (ragdoll) {
             delete ragdoll;
         }
     }
 
-    void Dynamic::stopmoving()
-    {
+    void Dynamic::stopmoving() {
         k_left = k_right = k_up = k_down = jumping = false;
         move = strafe = 0;
     }
 
-    void Dynamic::reset()
-    {
+    void Dynamic::reset() {
         Phys::reset();
         stopmoving();
         //TODO
@@ -33,6 +29,6 @@ namespace kraut::engine::entities {
     }
 
     Eigen::Vector3d Dynamic::abovehead() {
-        return o + Eigen::Vector3d(0, 0, aboveeye+4);
+        return o + Eigen::Vector3d(0, 0, aboveeye + 4);
     }
 }

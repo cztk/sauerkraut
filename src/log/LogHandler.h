@@ -25,8 +25,11 @@ namespace kraut::log {
         explicit LogHandler();
 
         ~LogHandler();
+
         std::thread run();
+
         void stop();
+
         void initialize(config::ConfigSection loggerconf);
 
         void log(LogLevel loglevel, const std::string &text);

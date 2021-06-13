@@ -10,7 +10,7 @@
 #include "AnimInfo.h"
 #include "../engine.h"
 #include "../../game/GameData.h"
-#include "../physics/Ragdoll.h"
+#include "../physics/ragdoll/original/Ragdoll.h"
 
 namespace kraut::engine::entities {
 
@@ -30,11 +30,13 @@ namespace kraut::engine::entities {
         unsigned char occluded;
 
         Dynamic();
+
         ~Dynamic();
 
         void stopmoving();
 
         void reset();
+
     private:
 
         Eigen::Vector3d abovehead();

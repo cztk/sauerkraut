@@ -15,11 +15,14 @@ namespace kraut::network {
 
     public:
         explicit NetworkHandler(log::LogHandler *pLogHandler);
+
         bool initialize();
+
         void deinitialize();
 
     private:
         bool initialize_enet();
+
         log::LogHandler *_logHandler;
     };
 

@@ -19,13 +19,15 @@ namespace kraut::game {
 
     public:
 
-        GameState(engine::Engine *pEngine, GameData *pGameData);
+        GameState(config::Config *pConfig, engine::Engine *pEngine, GameData *pGameData);
+
         void initialize();
 
     private:
+        config::Config *_config;
         engine::Engine *_engine;
         GameData *_gameData;
-        engine::entities::Player *player1 = nullptr;         // our client
+
         std::vector<engine::entities::Player *> players;       // all clients
     };
 }

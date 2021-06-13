@@ -18,8 +18,6 @@
 #include "sound/Sdl2SoundHandler.h"
 
 
-
-
 namespace kraut::engine::hal {
 
     class HalHandler {
@@ -31,8 +29,11 @@ namespace kraut::engine::hal {
                             kraut::log::LogHandler *pHandler);
 
         ~HalHandler();
+
         std::thread run();
+
         void stop();
+
         bool initialize();
 
         bool initVideo();
@@ -49,6 +50,7 @@ namespace kraut::engine::hal {
         bool _process = false;
 
         void deinitialize();
+
         void thread_main();
 
 

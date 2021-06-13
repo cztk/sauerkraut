@@ -3,6 +3,7 @@
 //
 
 #include "Base.h"
+
 namespace kraut::engine::entities {
 
 }

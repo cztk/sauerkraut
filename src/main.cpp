@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
         logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: game"));
         //TODO if this is right uh gamedate in engine?
         kraut::game::GameData gd;
-        kraut::game::GameState gamestate(&krautengine, &gd);
+        kraut::game::GameState gamestate(&config, &krautengine, &gd);
         gamestate.initialize();
 
         if(config.dedicated <= 1) {

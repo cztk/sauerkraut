@@ -7,22 +7,19 @@
 namespace kraut::engine::entities {
 
     Phys::Phys() : o(0, 0, 0), deltapos(0, 0, 0), newpos(0, 0, 0), yaw(0), pitch(0), roll(0), maxspeed(100),
-                radius(4.1f), eyeheight(14), aboveeye(1), xradius(4.1f), yradius(4.1f), zmargin(0),
-                state(CS_ALIVE), editstate(CS_ALIVE), type(ENT_PLAYER),
-                collidetype(COLLIDE_ELLIPSE),
-                blocked(false)
-    {
+                   radius(4.1f), eyeheight(14), aboveeye(1), xradius(4.1f), yradius(4.1f), zmargin(0),
+                   state(CS_ALIVE), editstate(CS_ALIVE), type(ENT_PLAYER),
+                   collidetype(COLLIDE_ELLIPSE),
+                   blocked(false) {
         reset();
     }
 
-    void Phys::resetinterp()
-    {
+    void Phys::resetinterp() {
         newpos = o;
         deltapos = Eigen::Vector3d(0, 0, 0);
     }
 
-    void Phys::reset()
-    {
+    void Phys::reset() {
         inwater = 0;
         timeinair = 0;
         jumping = false;
@@ -35,6 +32,7 @@ namespace kraut::engine::entities {
     Eigen::Vector3d Phys::feetpos(float offset) const {
         return o + Eigen::Vector3d(0, 0, offset - eyeheight);
     }
+
     Eigen::Vector3d Phys::headpos(float offset) const {
         return o + Eigen::Vector3d(0, 0, offset);
     }

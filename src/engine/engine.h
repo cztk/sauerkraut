@@ -15,9 +15,11 @@ namespace kraut::engine {
     class Engine {
     public:
         Engine(State *pState, config::Config *pConfig, log::LogHandler *pLogHandler);
+
         ~Engine();
 
         bool initialize();
+
         void deinitialize();
 
         int curtime = 0, lastmillis = 1, elapsedtime = 0, totalmillis = 1;

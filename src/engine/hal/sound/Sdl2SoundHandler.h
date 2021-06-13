@@ -16,12 +16,15 @@ namespace kraut::engine::hal::sound::sdl {
     class Sdl2SoundHandler final : public iSound {
     public:
         explicit Sdl2SoundHandler(log::LogHandler *pLogHandler, kraut::config::Config *pConfig);
+
         ~Sdl2SoundHandler() final;
 
         bool init() final;
+
         void deinit() final;
 
         void stopsound(int n, int chanid, int fade) final;
+
     private:
         log::LogHandler *_logHandler;
         config::Config *_config;

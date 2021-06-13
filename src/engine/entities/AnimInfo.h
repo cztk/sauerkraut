@@ -34,10 +34,21 @@ struct animinfo // description of a character's animation
     float speed;
     uint varseed;
 
-    animinfo() : anim(0), frame(0), range(0), basetime(0), speed(100.0f), varseed(0) { }
+    animinfo() : anim(0), frame(0), range(0), basetime(0), speed(100.0f), varseed(0) {}
 
-    bool operator==(const animinfo &o) const { return frame==o.frame && range==o.range && (anim&(ANIM_SETTIME|ANIM_DIR))==(o.anim&(ANIM_SETTIME|ANIM_DIR)) && (anim&ANIM_SETTIME || basetime==o.basetime) && speed==o.speed; }
-    bool operator!=(const animinfo &o) const { return frame!=o.frame || range!=o.range || (anim&(ANIM_SETTIME|ANIM_DIR))!=(o.anim&(ANIM_SETTIME|ANIM_DIR)) || (!(anim&ANIM_SETTIME) && basetime!=o.basetime) || speed!=o.speed; }
+    bool operator==(const animinfo &o) const { return frame == o.frame && range == o.range &&
+                                                      (anim & (ANIM_SETTIME | ANIM_DIR)) ==
+                                                      (o.anim & (ANIM_SETTIME | ANIM_DIR)) &&
+                                                      (anim & ANIM_SETTIME || basetime == o.basetime) &&
+                                                      speed == o.speed;
+    }
+
+    bool operator!=(const animinfo &o) const { return frame != o.frame || range != o.range ||
+                                                      (anim & (ANIM_SETTIME | ANIM_DIR)) !=
+                                                      (o.anim & (ANIM_SETTIME | ANIM_DIR)) ||
+                                                      (!(anim & ANIM_SETTIME) && basetime != o.basetime) ||
+                                                      speed != o.speed;
+    }
 };
 
 struct animinterpinfo // used for animation blending of animated characters

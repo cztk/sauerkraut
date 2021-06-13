@@ -11,10 +11,12 @@
 namespace kraut::game {
     class GameData {
     public:
-        int addWeapon(Weapon *pWeapon);
-        Weapon *getWeapon(int n);
+
+        int gamemode = 0;
     private:
-        std::vector<Weapon *> weapons;
+
+
+
     };
 }
 

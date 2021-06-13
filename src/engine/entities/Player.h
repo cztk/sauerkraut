@@ -13,12 +13,13 @@
 #include "../../game/PlayerState.h"
 #include "Phys.h"
 #include "Dynamic.h"
+#include "../../game/Weapon.h"
 
 namespace kraut::engine::entities {
 
     // aka fpsent
-class Player : public Dynamic, public game::PlayerState {
-            public:
+    class Player : public Dynamic, public game::PlayerState {
+    public:
         int weight;                         // affects the effectiveness of hitpush
         int clientnum, privilege, lastupdate, plag, ping;
         int lifesequence;                   // sequence id for each respawn, used in damage test
@@ -50,21 +51,25 @@ class Player : public Dynamic, public game::PlayerState {
         Eigen::Vector3d vel;
 
         Player(engine::Engine *pEngine, game::GameData *pGameData);
+
         ~Player();
 
 
         void hitpush(int damage, const Eigen::Vector3d &dir, Player *actor, int gun);
+
         void stopattacksound();
+
         void stopidlesound();
+
         void respawn();
+
         int respawnwait(int secs, int delay = 0);
 
         float explosion_selfpush = 2.5f;
 
     private:
-                engine::Engine *_engine;
-                game::GameData *_gameData;
-
+        engine::Engine *_engine;
+        game::GameData *_gameData;
 
 
     };

@@ -19,11 +19,15 @@ namespace kraut::engine::hal::video::sdl {
     class Sdl2VideoHandler final : public iVideo {
     public:
         explicit Sdl2VideoHandler(log::LogHandler *pLogHandler, kraut::config::Config *pConfig);
+
         bool init() final;
+
         void deinit() final;
 
         void grab_keyboard(bool b) final;
+
         void minimize_on_focus_loss(bool b) final;
+
         bool setupScreen() final;
 
     private:
@@ -49,21 +53,20 @@ namespace kraut::engine::hal::video::sdl {
 
         int multisample_config = 0;
         const std::vector<int> multisample_configs{
-                        0x3, /* try everything */
-                        0x2, 0x1, /* try disabling one at a time */
-                        0 /* try disabling everything */
-                };
+                0x3, /* try everything */
+                0x2, 0x1, /* try disabling one at a time */
+                0 /* try disabling everything */
+        };
 
 #ifdef __APPLE__
         const std::vector<int> glversions{ 32, 20 };
 #else
-        const std::vector<int> glversions{ 33, 32, 31, 30, 20 };
+        const std::vector<int> glversions{33, 32, 31, 30, 20};
 #endif
 
 
         int sdl_xgrab_bug = 0;
         int glcompat;
-
 
 
     };

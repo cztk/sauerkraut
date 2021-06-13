@@ -19,7 +19,7 @@ namespace kraut::engine::hal {
 
     void HalHandler::thread_main() {
 
-        if(initialize()) {
+        if (initialize()) {
 
             while (!_stop) {
                 std::unique_lock<std::mutex> lk(_main_mutex);
@@ -54,7 +54,7 @@ namespace kraut::engine::hal {
 
     bool HalHandler::initSound() {
         _logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: hal:sound"));
-
+        return false;
     }
 
     bool HalHandler::initialize() {
@@ -65,7 +65,7 @@ namespace kraut::engine::hal {
 
     void HalHandler::deinitialize() {
 
-        if(videoHandler != nullptr) {
+        if (videoHandler != nullptr) {
             videoHandler->deinit();
         }
 
