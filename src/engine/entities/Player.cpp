@@ -9,7 +9,7 @@ namespace kraut::engine::entities {
     Player::Player(engine::Engine *pEngine, game::GameData *pGameData) :
     weight(100), clientnum(-1), privilege(game::PRIV_NONE), lastupdate(0), plag(0), ping(0), lifesequence(0), respawned(-1),
     suicided(-1), lastpain(0), attacksound(-1), attackchan(-1), idlesound(-1), idlechan(-1), frags(0), flags(0),
-    deaths(0), totaldamage(0), totalshots(0), edit(NULL), smoothmillis(-1), playermodel(-1), ai(nullptr), ownernum(-1),
+    deaths(0), totaldamage(0), totalshots(0), edit(nullptr), smoothmillis(-1), playermodel(-1), ai(nullptr), ownernum(-1),
     muzzle(-1, -1, -1), _engine(pEngine), _gameData(pGameData)
     {
         respawn();

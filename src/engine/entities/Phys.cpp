@@ -33,10 +33,10 @@ namespace kraut::engine::entities {
     }
 
     Eigen::Vector3d Phys::feetpos(float offset) const {
-        return Eigen::Vector3d(o) + Eigen::Vector3d(0, 0, offset - eyeheight);
+        return o + Eigen::Vector3d(0, 0, offset - eyeheight);
     }
     Eigen::Vector3d Phys::headpos(float offset) const {
-        return Eigen::Vector3d(o) + Eigen::Vector3d(0, 0, offset);
+        return o + Eigen::Vector3d(0, 0, offset);
     }
 
     bool Phys::maymove() const {

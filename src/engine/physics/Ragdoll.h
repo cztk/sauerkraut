@@ -5,13 +5,11 @@
 #ifndef SAUERKRAUT_RAGDOLL_H
 #define SAUERKRAUT_RAGDOLL_H
 
-#include "../entities/Dynamic.h"
-
 namespace kraut::engine::physics {
 
     class Ragdoll {
     public:
-        void cleanragdoll(game::DynamicEntity *dynamicEntity);
+
     };
 }
 

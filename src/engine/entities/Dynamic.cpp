@@ -5,7 +5,8 @@
 #include "Dynamic.h"
 
 namespace kraut::engine::entities {
-    Dynamic::Dynamic(engine::Engine *pEngine) : ragdoll(nullptr), query(nullptr), lastrendered(0), occluded(0), _engine(pEngine)
+
+    Dynamic::Dynamic() : ragdoll(nullptr), query(nullptr), lastrendered(0), occluded(0)
     {
         reset();
     }
@@ -13,7 +14,7 @@ namespace kraut::engine::entities {
     Dynamic::~Dynamic()
     {
         if(ragdoll) {
-            _engine->ragdoll->cleanragdoll(this);
+            delete ragdoll;
         }
     }
 
@@ -27,10 +28,11 @@ namespace kraut::engine::entities {
     {
         Phys::reset();
         stopmoving();
-        loopi(MAXANIMPARTS) animinterp[i].reset();
+        //TODO
+        //loopi(MAXANIMPARTS) animinterp[i].reset();
     }
 
     Eigen::Vector3d Dynamic::abovehead() {
-        return Eigen::Vector3d(o) + Eigen::Vector3d(0, 0, aboveeye+4);
+        return o + Eigen::Vector3d(0, 0, aboveeye+4);
     }
 }

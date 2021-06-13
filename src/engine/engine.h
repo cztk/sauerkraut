@@ -9,7 +9,6 @@
 #include "../config/Config.h"
 #include "hal/HalHandler.h"
 #include "../network/NetworkHandler.h"
-#include "physics/Ragdoll.h"
 
 namespace kraut::engine {
 
@@ -24,7 +23,6 @@ namespace kraut::engine {
         int curtime = 0, lastmillis = 1, elapsedtime = 0, totalmillis = 1;
 
         kraut::engine::hal::HalHandler *engine_hal_hnd = nullptr;
-        physics::Ragdoll *ragdoll = nullptr;
     private:
         State *_state;
         config::Config *_config;

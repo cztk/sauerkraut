@@ -12,6 +12,7 @@
 #include "../../game/GameData.h"
 #include "../../game/PlayerState.h"
 #include "Phys.h"
+#include "Dynamic.h"
 
 namespace kraut::engine::entities {
 

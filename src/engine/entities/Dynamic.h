@@ -9,6 +9,8 @@
 #include "Light.h"
 #include "AnimInfo.h"
 #include "../engine.h"
+#include "../../game/GameData.h"
+#include "../physics/Ragdoll.h"
 
 namespace kraut::engine::entities {
 
@@ -20,21 +22,20 @@ namespace kraut::engine::entities {
         animinterpinfo animinterp[MAXANIMPARTS];
         //TODO ragdoll
         //ragdolldata *ragdoll;
-        void *ragdoll;
+        physics::Ragdoll *ragdoll;
         //TODO octa
         //occludequery *query;
         void *query;
         int lastrendered;
         unsigned char occluded;
 
-        Dynamic(engine::Engine *pEngine);
+        Dynamic();
         ~Dynamic();
 
         void stopmoving();
 
         void reset();
     private:
-        engine::Engine *_engine;
 
         Eigen::Vector3d abovehead();
     };

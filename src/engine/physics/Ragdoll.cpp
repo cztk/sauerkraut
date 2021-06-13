@@ -5,7 +5,5 @@
 #include "Ragdoll.h"
 namespace kraut::engine::physics {
 
-    void Ragdoll::cleanragdoll(game::DynamicEntity *dynamicEntity) {
 
-    }
 }

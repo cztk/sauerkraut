@@ -7,6 +7,8 @@
 
 #include <eigen3/Eigen/Core>
 #include "States.h"
+#include "../../game/GameData.h"
+#include "../engine.h"
 
 namespace kraut::engine::entities {
 
