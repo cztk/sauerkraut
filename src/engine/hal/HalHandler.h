@@ -10,13 +10,23 @@
 #include <condition_variable>
 #include "../state.h"
 #include "../../config/Config.h"
-#include "handler/Sdl2Handler.h"
-#include "iHandler.h"
+
+#include "iVideo.h"
+#include "iSound.h"
+
+#include "video/Sdl2VideoHandler.h"
+#include "sound/Sdl2SoundHandler.h"
+
+
+
 
 namespace kraut::engine::hal {
 
     class HalHandler {
     public:
+        iVideo *videoHandler = nullptr;
+        iSound *soundHandler = nullptr;
+
         explicit HalHandler(kraut::engine::State *pState, kraut::config::Config *pConfig,
                             kraut::log::LogHandler *pHandler);
 
@@ -25,14 +35,12 @@ namespace kraut::engine::hal {
         void stop();
         bool initialize();
 
-        void initVideo();
+        bool initVideo();
 
     private:
         State *_state;
         config::Config *_config;
         log::LogHandler *_logHandler;
-
-        iHandler *hardwareHandler = nullptr;
 
 
         std::mutex _main_mutex;
@@ -44,6 +52,7 @@ namespace kraut::engine::hal {
         void thread_main();
 
 
+        bool initSound();
     };
 
 }

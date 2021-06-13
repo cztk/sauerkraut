@@ -1,28 +1,30 @@
 //
 // Created by ztk on 2021-06-11.
+// TDO https://www.glfw.org/
+// https://github.com/nigels-com/glew
 //
 
-#ifndef SAUERKRAUT_SDL2HANDLER_H
+#ifndef SAUERKRAUT_SDL2SOUNDHANDLER_H
 #define SAUERKRAUT_SDL2HANDLER_H
 
 #include <string>
 #include <SDL2/SDL.h>
 #include "../../../utils/stringhelper.h"
-#include "../iHandler.h"
+#include "../iVideo.h"
 #include "../../state.h"
 #include "../../../log/LogHandler.h"
 #include "../../../config/Config.h"
 
-namespace kraut::engine::hal::sdl {
-    class Sdl2Handler : public iHandler {
+namespace kraut::engine::hal::video::sdl {
+    class Sdl2VideoHandler final : public iVideo {
     public:
-        explicit Sdl2Handler(log::LogHandler *pLogHandler, kraut::config::Config *pConfig);
-        bool init() override;
-        void deinit() override;
+        explicit Sdl2VideoHandler(log::LogHandler *pLogHandler, kraut::config::Config *pConfig);
+        bool init() final;
+        void deinit() final;
 
-        void grab_keyboard(bool b) override;
-        void minimize_on_focus_loss(bool b) override;
-        bool setupScreen() override;
+        void grab_keyboard(bool b) final;
+        void minimize_on_focus_loss(bool b) final;
+        bool setupScreen() final;
 
     private:
         log::LogHandler *_logHandler;
@@ -67,4 +69,4 @@ namespace kraut::engine::hal::sdl {
     };
 }
 
-#endif //SAUERKRAUT_SDL2HANDLER_H
+#endif //SAUERKRAUT_SDL2SOUNDHANDLER_H

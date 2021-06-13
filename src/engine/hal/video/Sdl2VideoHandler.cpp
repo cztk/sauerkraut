@@ -2,12 +2,12 @@
 // Created by ztk on 2021-06-11.
 //
 
-#include "Sdl2Handler.h"
+#include "Sdl2VideoHandler.h"
 
 
-namespace kraut::engine::hal::sdl {
+namespace kraut::engine::hal::video::sdl {
 
-    bool Sdl2Handler::init() {
+    bool Sdl2VideoHandler::init() {
         _logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: hal:sdl"));
         if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
             _logHandler->log(kraut::log::LogLevel::Critical,
@@ -27,11 +27,11 @@ namespace kraut::engine::hal::sdl {
         return true;
     }
 
-    void Sdl2Handler::deinit() {
+    void Sdl2VideoHandler::deinit() {
 
     }
 
-    void Sdl2Handler::grab_keyboard(bool b) {
+    void Sdl2VideoHandler::grab_keyboard(bool b) {
         if (b) {
             SDL_SetHint(SDL_HINT_GRAB_KEYBOARD, "1");
         } else {
@@ -39,7 +39,7 @@ namespace kraut::engine::hal::sdl {
         }
     }
 
-    void Sdl2Handler::minimize_on_focus_loss(bool b) {
+    void Sdl2VideoHandler::minimize_on_focus_loss(bool b) {
         if (b) {
             SDL_SetHint(SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "1");
         } else {
@@ -48,13 +48,13 @@ namespace kraut::engine::hal::sdl {
     }
 
 
-    Sdl2Handler::Sdl2Handler(log::LogHandler *pLogHandler, kraut::config::Config *pConfig) : _logHandler(pLogHandler),
+    Sdl2VideoHandler::Sdl2VideoHandler(log::LogHandler *pLogHandler, kraut::config::Config *pConfig) : _logHandler(pLogHandler),
                                                                                              _config(pConfig) {
 
     }
 
     // TODO make this nice
-    bool Sdl2Handler::setupScreen() {
+    bool Sdl2VideoHandler::setupScreen() {
         if (glcontext) {
             SDL_GL_DeleteContext(glcontext);
             glcontext = nullptr;

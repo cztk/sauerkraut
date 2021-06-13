@@ -4,6 +4,7 @@
 #include "engine/state.h"
 #include "engine/hal/HalHandler.h"
 #include "engine/engine.h"
+#include "game/GameState.h"
 
 int main(int argc, char **argv) {
 
@@ -46,6 +47,12 @@ int main(int argc, char **argv) {
     kraut::engine::Engine krautengine(engine_state, &config, logHandler);
 
     if(krautengine.initialize()) {
+
+        logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: game"));
+        //TODO if this is right uh gamedate in engine?
+        kraut::game::GameData gd;
+        kraut::game::GameState gamestate(&krautengine, &gd);
+        gamestate.initialize();
 
         if(config.dedicated <= 1) {
             logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: client"));
