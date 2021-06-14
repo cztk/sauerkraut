@@ -16,11 +16,12 @@
 #include "../../../config/Config.h"
 #include "iHardwareAccel.h"
 #include "hardwareaccel/Opengl.h"
+#include "../../engine.h"
 
 namespace kraut::engine::hal::video::sdl {
     class Sdl2VideoHandler final : public iVideo {
     public:
-        explicit Sdl2VideoHandler(log::LogHandler *pLogHandler, kraut::config::Config *pConfig);
+        explicit Sdl2VideoHandler(log::LogHandler *pLogHandler, kraut::config::Config *pConfig, engine::Engine *pEngine);
 
         bool init() final;
 
@@ -74,6 +75,7 @@ namespace kraut::engine::hal::video::sdl {
         int glcompat;
 
         hardwareaccel::iHardwareAccel *hardwareAccel;
+        engine::Engine *_engine;
 
     };
 }

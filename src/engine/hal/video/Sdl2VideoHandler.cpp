@@ -48,9 +48,8 @@ namespace kraut::engine::hal::video::sdl {
     }
 
 
-    Sdl2VideoHandler::Sdl2VideoHandler(log::LogHandler *pLogHandler, kraut::config::Config *pConfig) : _logHandler(
-            pLogHandler),
-                                                                                                       _config(pConfig) {
+    Sdl2VideoHandler::Sdl2VideoHandler(log::LogHandler *pLogHandler, kraut::config::Config *pConfig, engine::Engine *pEngine) :
+    _logHandler(pLogHandler), _config(pConfig), _engine(pEngine) {
 
     }
 
@@ -203,8 +202,8 @@ namespace kraut::engine::hal::video::sdl {
 
     bool Sdl2VideoHandler::setupHardwareAccel() {
         _logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: hal:sdl::gl"));
-        hardwareAccel = new hardwareaccel::Opengl();
-        return false;
+        hardwareAccel = new hardwareaccel::Opengl(_engine);
+        return hardwareAccel->init();
     }
 
 }

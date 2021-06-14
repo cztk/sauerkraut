@@ -7,7 +7,8 @@
 namespace kraut::engine::hal::video::sdl::hardwareaccel {
 
 
-    Opengl::Opengl() {
+    Opengl::Opengl(engine::Engine *pEngine, config::Config *pConfig, log::LogHandler *pLoghandler) :
+    _engine(pEngine), _config(pConfig), _logHandler(pLoghandler) {
 
     }
 
@@ -439,10 +440,55 @@ namespace kraut::engine::hal::video::sdl::hardwareaccel {
     }
 
     bool Opengl::init() {
+        if(checkextensions()) {
+            gl_init();
+            return true;
+        }
         return false;
     }
 
     void *Opengl::getprocaddress(const char *name) {
         return SDL_GL_GetProcAddress(name);
+    }
+
+    void Opengl::gl_setuptexcompress()
+    {
+        if(!usetexcompress) return;
+
+        GLenum hint = GL_DONT_CARE;
+        switch(texcompressquality)
+        {
+            case 1: hint = GL_NICEST; break;
+            case 0: hint = GL_FASTEST; break;
+        }
+        glHint(GL_TEXTURE_COMPRESSION_HINT, hint);
+    }
+
+    void Opengl::gl_resize()
+    {
+        glViewport(0, 0, _config->engine.screen_w, _config->engine.screen_h);
+    }
+
+    bool Opengl::gl_init() {
+        glClearColor(0, 0, 0, 0);
+        glClearDepth(1);
+        glDepthFunc(GL_LESS);
+        glDisable(GL_DEPTH_TEST);
+
+        glEnable(GL_LINE_SMOOTH);
+        //glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+
+        glFrontFace(GL_CW);
+        glCullFace(GL_BACK);
+        glDisable(GL_CULL_FACE);
+//TODO
+//        gle::setup();
+//
+//        setupshaders();
+
+        gl_setuptexcompress();
+
+        gl_resize();
+        return true;
     }
 }
