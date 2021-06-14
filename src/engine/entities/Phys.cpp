@@ -25,8 +25,10 @@ namespace kraut::engine::entities {
         jumping = false;
         strafe = move = 0;
         physstate = PHYS_FALL;
-        vel = falling = Eigen::Vector3d(0, 0, 0);
-        floor = Eigen::Vector3d(0, 0, 1);
+
+        vel << 0,0,0;
+        falling << 0,0,0;
+        floor << 0,0,1;
     }
 
     Eigen::Vector3d Phys::feetpos(float offset) const {

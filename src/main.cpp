@@ -5,6 +5,7 @@
 #include "engine/hal/HalHandler.h"
 #include "engine/engine.h"
 #include "game/GameState.h"
+#include "game/client/GameClient.h"
 
 int main(int argc, char **argv) {
 
@@ -56,6 +57,18 @@ int main(int argc, char **argv) {
 
         if(config.dedicated <= 1) {
             logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: client"));
+
+            auto client = new kraut::game::client::GameClient(&config, &krautengine, &gd, &gamestate);
+            client->initialize();
+
+            krautengine.initVideo();
+
+
+
+
+            client->deinitialize();
+
+
         } else {
             logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: server"));
         }

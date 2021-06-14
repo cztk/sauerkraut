@@ -23,6 +23,8 @@ namespace kraut::game {
 
         void initialize();
 
+        void addPlayer(engine::entities::Player *pPlayer);
+
     private:
         config::Config *_config;
         engine::Engine *_engine;

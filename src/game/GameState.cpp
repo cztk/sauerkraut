@@ -16,5 +16,9 @@ namespace kraut::game {
 
     }
 
+    void GameState::addPlayer(engine::entities::Player *pPlayer) {
+        players.push_back(pPlayer);
+    }
+
 
 }

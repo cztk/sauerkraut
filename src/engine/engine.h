@@ -24,6 +24,9 @@ namespace kraut::engine {
 
         int curtime = 0, lastmillis = 1, elapsedtime = 0, totalmillis = 1;
 
+        bool initSound();
+        bool initVideo();
+
         kraut::engine::hal::HalHandler *engine_hal_hnd = nullptr;
     private:
         State *_state;
@@ -34,7 +37,6 @@ namespace kraut::engine {
 
 
         std::thread engine_hal_thread;
-
 
     };
 }

@@ -38,6 +38,8 @@ namespace kraut::engine::hal {
 
         bool initVideo();
 
+        bool initSound();
+
     private:
         State *_state;
         config::Config *_config;
@@ -54,7 +56,6 @@ namespace kraut::engine::hal {
         void thread_main();
 
 
-        bool initSound();
     };
 
 }

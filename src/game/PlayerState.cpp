@@ -6,7 +6,7 @@
 
 namespace kraut::game {
 
-    PlayerState::PlayerState() : maxhealth(100), aitype(AI_NONE), skill(0) {
+    PlayerState::PlayerState() {
 
     }
 
@@ -68,6 +68,21 @@ namespace kraut::game {
     }
 
     void PlayerState::respawn() {
+        respawned++;
+        suicided++;
+        lastaction = 0;
+        lastattackgun = gunselect;
+        attacking = false;
+        lasttaunt = 0;
+        lastpickup = -1;
+        lastpickupmillis = 0;
+        lastbase = -1;
+        lastrepammo = -1;
+        flagpickup = 0;
+        tokens = 0;
+        lastcollect << -1e10f, -1e10f, -1e10f;
+        lastnode = -1;
+
         maxhealth = 100;
         health = maxhealth;
         armour = 0;

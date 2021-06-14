@@ -24,8 +24,9 @@ namespace kraut::engine::entities {
     void Dynamic::reset() {
         Phys::reset();
         stopmoving();
-        //TODO
-        //loopi(MAXANIMPARTS) animinterp[i].reset();
+        for(auto & i : animinterp) {
+            i.reset();
+        }
     }
 
     Eigen::Vector3d Dynamic::abovehead() {

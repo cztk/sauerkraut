@@ -29,6 +29,14 @@ namespace kraut::engine {
         return true;
     }
 
+    bool Engine::initSound() {
+        return engine_hal_hnd->initSound();
+    }
+
+    bool Engine::initVideo() {
+        return engine_hal_hnd->initVideo();
+    }
+
     void Engine::deinitialize() {
         if (_config->dedicated <= 1 && engine_hal_hnd != nullptr) {
             engine_hal_hnd->stop();

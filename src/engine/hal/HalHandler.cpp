@@ -44,23 +44,23 @@ namespace kraut::engine::hal {
 
     bool HalHandler::initVideo() {
         _logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: hal:video"));
-
-        videoHandler->grab_keyboard(false);
+        videoHandler = new video::sdl::Sdl2VideoHandler(_logHandler, _config);
+        if(videoHandler->init()) {
+            videoHandler->grab_keyboard(false);
 #if !defined(WIN32) && !defined(__APPLE__)
-        videoHandler->minimize_on_focus_loss(false);
+            videoHandler->minimize_on_focus_loss(false);
 #endif
-        return videoHandler->setupScreen();
+            return videoHandler->setupScreen();
+        } else {
+            return false;
+        }
     }
 
     bool HalHandler::initSound() {
         _logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: hal:sound"));
-        return false;
-    }
-
-    bool HalHandler::initialize() {
-        videoHandler = new video::sdl::Sdl2VideoHandler(_logHandler, _config);
         soundHandler = new sound::sdl::Sdl2SoundHandler(_logHandler, _config);
-        return (videoHandler->init() && soundHandler->init());
+        return soundHandler->init();
+        return false;
     }
 
     void HalHandler::deinitialize() {
@@ -69,6 +69,10 @@ namespace kraut::engine::hal {
             videoHandler->deinit();
         }
 
+    }
+
+    bool HalHandler::initialize() {
+        return false;
     }
 
 

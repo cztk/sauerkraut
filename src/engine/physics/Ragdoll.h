@@ -5,6 +5,8 @@
 #ifndef SAUERKRAUT_RAGDOLL_H
 #define SAUERKRAUT_RAGDOLL_H
 
+#include <eigen3/Eigen/Core>
+
 namespace kraut::engine::physics {
 
     class Ragdoll {

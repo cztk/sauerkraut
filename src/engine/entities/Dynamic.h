@@ -10,19 +10,20 @@
 #include "AnimInfo.h"
 #include "../engine.h"
 #include "../../game/GameData.h"
-#include "../physics/ragdoll/original/Ragdoll.h"
 
 namespace kraut::engine::entities {
 
     class Dynamic : public Phys { // animated characters, or characters that can receive input
     public:
         bool k_left, k_right, k_up, k_down;         // see input code
+        int flags;  // the only dynamic state of a map entity
 
         Light light;
+        Dynamic *attached;
+
         animinterpinfo animinterp[MAXANIMPARTS];
         //TODO ragdoll
         //ragdolldata *ragdoll;
-        physics::Ragdoll *ragdoll;
         //TODO octa
         //occludequery *query;
         void *query;
@@ -35,11 +36,11 @@ namespace kraut::engine::entities {
 
         void stopmoving();
 
-        void reset();
+        void reset() override;
 
     private:
-
         Eigen::Vector3d abovehead();
+        void *ragdoll;
     };
 
 }
