@@ -464,9 +464,9 @@ namespace kraut::engine::hal::video::sdl::hardwareaccel {
         glHint(GL_TEXTURE_COMPRESSION_HINT, hint);
     }
 
-    void Opengl::gl_resize()
+    void Opengl::resizeViewport(int width, int height, int x, int y)
     {
-        glViewport(0, 0, _config->engine.screen_w, _config->engine.screen_h);
+        glViewport(x, y, width, height);
     }
 
     bool Opengl::gl_init() {
@@ -481,14 +481,14 @@ namespace kraut::engine::hal::video::sdl::hardwareaccel {
         glFrontFace(GL_CW);
         glCullFace(GL_BACK);
         glDisable(GL_CULL_FACE);
-//TODO
-//        gle::setup();
-//
-//        setupshaders();
+
+        gle::setup();
+
+        setupshaders();
 
         gl_setuptexcompress();
 
-        gl_resize();
+        resizeViewport(_config->engine.screen_w, _config->engine.screen_h, 0, 0);
         return true;
     }
 }

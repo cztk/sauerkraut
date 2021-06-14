@@ -19,6 +19,7 @@ namespace kraut::engine::hal::video::sdl::hardwareaccel {
         Opengl(engine::Engine *pEngine, config::Config *pConfig, log::LogHandler *pLoghandler);
         bool checkextensions();
         bool init() final;
+        void resizeViewport(int width, int height, int x = 0, int y = 0);
     private:
 
         engine::Engine *_engine;
@@ -198,9 +199,10 @@ namespace kraut::engine::hal::video::sdl::hardwareaccel {
         PFNGLISVERTEXARRAYPROC      glIsVertexArray_;
 
         bool gl_init();
-        void gl_resize();
 
         void gl_setuptexcompress();
+
+
     };
 
 }
