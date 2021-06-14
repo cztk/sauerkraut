@@ -19,6 +19,10 @@ namespace kraut::engine::hal {
         virtual void minimize_on_focus_loss(bool b) = 0;
 
         virtual bool setupScreen() = 0;
+
+        virtual void showcursor(bool b) = 0;
+        virtual void textinput(bool b) = 0;
+        virtual bool setupHardwareAccel() = 0;
     };
 }
 #endif //SAUERKRAUT_IVIDEO_H

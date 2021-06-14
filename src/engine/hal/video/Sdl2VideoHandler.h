@@ -14,6 +14,8 @@
 #include "../../state.h"
 #include "../../../log/LogHandler.h"
 #include "../../../config/Config.h"
+#include "iHardwareAccel.h"
+#include "hardwareaccel/Opengl.h"
 
 namespace kraut::engine::hal::video::sdl {
     class Sdl2VideoHandler final : public iVideo {
@@ -29,6 +31,9 @@ namespace kraut::engine::hal::video::sdl {
         void minimize_on_focus_loss(bool b) final;
 
         bool setupScreen() final;
+        void showcursor(bool b) final;
+        void textinput(bool b) final;
+        bool setupHardwareAccel() final;
 
     private:
         log::LogHandler *_logHandler;
@@ -68,6 +73,7 @@ namespace kraut::engine::hal::video::sdl {
         int sdl_xgrab_bug = 0;
         int glcompat;
 
+        hardwareaccel::iHardwareAccel *hardwareAccel;
 
     };
 }

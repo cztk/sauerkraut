@@ -34,7 +34,11 @@ namespace kraut::engine {
     }
 
     bool Engine::initVideo() {
-        return engine_hal_hnd->initVideo();
+        if(engine_hal_hnd->initVideo()) {
+            engine_hal_hnd->videoHandler->showcursor(false);
+            engine_hal_hnd->videoHandler->textinput(false);
+        }
+        return false;
     }
 
     void Engine::deinitialize() {

@@ -183,4 +183,28 @@ namespace kraut::engine::hal::video::sdl {
         SDL_GetWindowSize(screen, &_config->engine.screen_w, &_config->engine.screen_h);
         return true;
     }
+
+
+    void Sdl2VideoHandler::showcursor(bool b) {
+        if(b) {
+            SDL_ShowCursor(SDL_TRUE);
+        } else {
+            SDL_ShowCursor(SDL_FALSE);
+        }
+    }
+
+    void Sdl2VideoHandler::textinput(bool b) {
+        if(b) {
+            SDL_StartTextInput();
+        } else {
+            SDL_StopTextInput();
+        }
+    }
+
+    bool Sdl2VideoHandler::setupHardwareAccel() {
+        _logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: hal:sdl::gl"));
+        hardwareAccel = new hardwareaccel::Opengl();
+        return false;
+    }
+
 }

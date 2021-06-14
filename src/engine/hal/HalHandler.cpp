@@ -50,10 +50,11 @@ namespace kraut::engine::hal {
 #if !defined(WIN32) && !defined(__APPLE__)
             videoHandler->minimize_on_focus_loss(false);
 #endif
-            return videoHandler->setupScreen();
-        } else {
-            return false;
+            if(videoHandler->setupScreen()) {
+                return videoHandler->setupHardwareAccel();
+            }
         }
+        return false;
     }
 
     bool HalHandler::initSound() {

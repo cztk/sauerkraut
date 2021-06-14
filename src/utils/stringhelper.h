@@ -7,7 +7,9 @@
 
 #include <cstdarg>
 #include <string>
+#include <sstream>
 #include <vector>
+#include <unordered_set>
 
 namespace utils {
 
@@ -38,6 +40,20 @@ namespace utils {
             std::vsnprintf(zc.data(), zc.size(), zcFormat, vaArgs);
             va_end(vaArgs);
             return std::string(zc.data(), zc.size() - 1);
+        }
+        static std::vector<std::string> string_split_toVec(const std::string &str) {
+            std::vector<std::string> result;
+            std::istringstream iss(str);
+            for (std::string s; iss >> s; )
+                result.push_back(s);
+            return result;
+        }
+        static std::unordered_set<std::string> string_split_toUset(const std::string &str) {
+            std::unordered_set<std::string> result;
+            std::istringstream iss(str);
+            for (std::string s; iss >> s; )
+                result.insert(s);
+            return result;
         }
     };
 }
