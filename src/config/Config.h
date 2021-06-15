@@ -27,6 +27,8 @@ namespace kraut::config {
         int screen_fullscreen = 1;
         int screen_fulldesktop = 0;
         int curvsync = -1;
+        int texcompressquality = -1;
+        int usetexcompress = 0;
     };
 
     struct ServerConfig {

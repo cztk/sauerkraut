@@ -35,6 +35,8 @@ namespace kraut::engine::hal::video::sdl {
         void showcursor(bool b) final;
         void textinput(bool b) final;
         bool setupHardwareAccel() final;
+        void setuptexcompress(int texcompressslevel ) final;
+        void resizeViewport(int width, int height, int x, int y) final;
 
     private:
         log::LogHandler *_logHandler;
@@ -76,7 +78,6 @@ namespace kraut::engine::hal::video::sdl {
 
         hardwareaccel::iHardwareAccel *hardwareAccel;
         engine::Engine *_engine;
-
     };
 }
 

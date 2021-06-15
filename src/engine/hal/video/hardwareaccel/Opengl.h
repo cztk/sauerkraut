@@ -11,32 +11,32 @@
 #include <string>
 #include "../../../../utils/stringhelper.h"
 #include "../iHardwareAccel.h"
-#include "../../../engine.h"
+#include "../../../../log/LogHandler.h"
 
 namespace kraut::engine::hal::video::sdl::hardwareaccel {
     class Opengl final : public iHardwareAccel {
     public:
-        Opengl(engine::Engine *pEngine, config::Config *pConfig, log::LogHandler *pLoghandler);
-        bool checkextensions();
+        explicit Opengl(log::LogHandler *pLoghandler);
+        bool checkextensions() override;
         bool init() final;
-        void resizeViewport(int width, int height, int x = 0, int y = 0);
+        void setuptexcompress(int texcompressslevel) final;
+        void resizeViewport(int width, int height, int x, int y) final;
+
     private:
 
-        engine::Engine *_engine;
-        config::Config *_config;
         log::LogHandler *_logHandler;
         int fpdepthfx = 0;
         int reservevpparams = 10;
         int hwmaxaniso = 0;
 
-        //TODO put somewhere or use some generic funcs
-        int texcompressquality = 0;
+        int usetexcompress = 0;
+        int texcompress = 0;
+
         int waterfallrefract = 0;
         int grass = 0;
         int glare = 0;
         int depthfxsize = 0;
         int blurdepthfx = 0;
-        int texcompress = 0;
         int filltjoints = 0;
         int smoothshadowmappeel =0;
         int maxdynlights = 5; //TODO adjustable
@@ -200,7 +200,7 @@ namespace kraut::engine::hal::video::sdl::hardwareaccel {
 
         bool gl_init();
 
-        void gl_setuptexcompress();
+
 
 
     };

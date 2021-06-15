@@ -23,6 +23,8 @@ namespace kraut::engine::hal {
         virtual void showcursor(bool b) = 0;
         virtual void textinput(bool b) = 0;
         virtual bool setupHardwareAccel() = 0;
+        virtual void setuptexcompress(int texcompressslevel) = 0;
+        virtual void resizeViewport(int width, int height, int x, int y) = 0;
     };
 }
 #endif //SAUERKRAUT_IVIDEO_H

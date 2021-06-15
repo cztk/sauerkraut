@@ -35,6 +35,9 @@ namespace kraut::engine {
 
     bool Engine::initVideo() {
         if(engine_hal_hnd->initVideo()) {
+            if(!_config->engine.usetexcompress) _config->engine.texcompressquality = -1;
+            engine_hal_hnd->videoHandler->setuptexcompress(_config->engine.texcompressquality);
+            engine_hal_hnd->videoHandler->resizeViewport(_config->engine.screen_w, _config->engine.screen_h, 0, 0);
             engine_hal_hnd->videoHandler->showcursor(false);
             engine_hal_hnd->videoHandler->textinput(false);
         }

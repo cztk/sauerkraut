@@ -28,6 +28,11 @@ namespace kraut::engine::hal::video::sdl {
     }
 
     void Sdl2VideoHandler::deinit() {
+        if(hardwareAccel) {
+            //TODO
+            //hardwareAccel->deinit();
+            delete hardwareAccel;
+        }
 
     }
 
@@ -204,6 +209,18 @@ namespace kraut::engine::hal::video::sdl {
         _logHandler->log(kraut::log::LogLevel::Info, utils::StringHelper::vFormat("init: hal:sdl::gl"));
         hardwareAccel = new hardwareaccel::Opengl(_engine);
         return hardwareAccel->init();
+    }
+
+    void Sdl2VideoHandler::setuptexcompress(int texcompressslevel) {
+        if(hardwareAccel) {
+            hardwareAccel->setuptexcompress(texcompressslevel);
+        }
+
+    }
+    void Sdl2VideoHandler::resizeViewport(int width, int height, int x, int y) {
+        if(hardwareAccel) {
+            hardwareAccel->resizeViewport(width, height, x, y);
+        }
     }
 
 }

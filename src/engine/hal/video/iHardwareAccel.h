@@ -12,6 +12,8 @@ namespace kraut::engine::hal::video::sdl::hardwareaccel {
     public:
         virtual bool checkextensions() = 0;
         virtual bool init() = 0;
+        virtual void setuptexcompress(int texcompressslevel) = 0;
+        virtual void resizeViewport(int width, int height, int x, int y) = 0;
     };
 
 }

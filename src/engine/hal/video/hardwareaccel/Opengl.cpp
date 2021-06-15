@@ -7,8 +7,7 @@
 namespace kraut::engine::hal::video::sdl::hardwareaccel {
 
 
-    Opengl::Opengl(engine::Engine *pEngine, config::Config *pConfig, log::LogHandler *pLoghandler) :
-    _engine(pEngine), _config(pConfig), _logHandler(pLoghandler) {
+    Opengl::Opengl(log::LogHandler *pLoghandler) : _logHandler(pLoghandler) {
 
     }
 
@@ -451,16 +450,23 @@ namespace kraut::engine::hal::video::sdl::hardwareaccel {
         return SDL_GL_GetProcAddress(name);
     }
 
-    void Opengl::gl_setuptexcompress()
+    void Opengl::setuptexcompress(int texcompressslevel)
     {
-        if(!usetexcompress) return;
+        usetexcompress = 1;
 
         GLenum hint = GL_DONT_CARE;
-        switch(texcompressquality)
+        switch(texcompressslevel)
         {
-            case 1: hint = GL_NICEST; break;
-            case 0: hint = GL_FASTEST; break;
+            case 1:
+                texcompress = 1;
+                hint = GL_NICEST;
+                break;
+            case 0:
+                texcompress = 0;
+                hint = GL_FASTEST;
+                break;
         }
+
         glHint(GL_TEXTURE_COMPRESSION_HINT, hint);
     }
 
@@ -486,9 +492,6 @@ namespace kraut::engine::hal::video::sdl::hardwareaccel {
 
         setupshaders();
 
-        gl_setuptexcompress();
-
-        resizeViewport(_config->engine.screen_w, _config->engine.screen_h, 0, 0);
         return true;
     }
 }
