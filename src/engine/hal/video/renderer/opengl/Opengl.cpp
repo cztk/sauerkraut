@@ -4,7 +4,7 @@
 
 #include "Opengl.h"
 
-namespace kraut::engine::hal::video::sdl::hardwareaccel {
+namespace kraut::engine::hal::video::sdl::renderer::opengl {
 
 
     Opengl::Opengl(log::LogHandler *pLoghandler) : _logHandler(pLoghandler) {
@@ -488,10 +488,390 @@ namespace kraut::engine::hal::video::sdl::hardwareaccel {
         glCullFace(GL_BACK);
         glDisable(GL_CULL_FACE);
 
-        gle::setup();
+        Glemu_setup();
 
         setupshaders();
 
         return true;
     }
+
+
+    void Opengl::Glemu_begin(GLenum mode)
+    {
+        glemu_primtype = mode;
+    }
+
+    void Opengl::Glemu_begin(GLenum mode, int numverts)
+    {
+
+        glemu_primtype = mode;
+        if(glversion >= 300 && !intel_mapbufferrange_bug)
+        {
+            // we set the glemu_vertexsize to our needed data size before (def...) takes GL_FLOAT amount of space e.g.
+            // multiplied with our number of vertexes we get the len of our total data
+            int len = numverts * glemu_vertexsize;
+
+            // if we have data in our buffer already, we need to check if our new data can fit or if
+            // we need a new buffer.
+            //TODO what happens with the previously reserved?
+            if(glemu_vbooffset + len >= glemu_maxvboxsize)
+            {
+                len = std::min(len, glemu_maxvboxsize);
+
+                // get 1 buffer object name ref to glemu_vbo
+                if(!glemu_vbo){
+                    glGenBuffers_(1, &glemu_vbo);
+                }
+
+                // bind qlemu_vbo as Vertex attributes target
+                glBindBuffer_(GL_ARRAY_BUFFER, glemu_vbo);
+
+                // create and initialize buffer object's data store
+                // void glBufferData( 	GLenum target, GLsizeiptr size, onst void * data, GLenum usage);
+                glBufferData_(GL_ARRAY_BUFFER, glemu_maxvboxsize, nullptr, GL_STREAM_DRAW);
+
+                glemu_vbooffset = 0;
+            }
+            else if(!glemu_lastvertexsize){
+                glBindBuffer_(GL_ARRAY_BUFFER, glemu_vbo);
+            }
+            void *buf = glMapBufferRange_(GL_ARRAY_BUFFER, glemu_vbooffset, len, GL_MAP_WRITE_BIT|GL_MAP_INVALIDATE_RANGE_BIT|GL_MAP_UNSYNCHRONIZED_BIT);
+            if(buf) {
+                glemu_attribbuf.reset((unsigned char *) buf, len);
+            }
+        }
+    }
+
+
+
+    void Opengl::Glemu_enablequads()
+    {
+        glemu_quadsenabled = true;
+
+        if(glversion < 300) return;
+
+        if(glemu_quadindexes)
+        {
+            glBindBuffer_(GL_ELEMENT_ARRAY_BUFFER, glemu_quadindexes);
+            return;
+        }
+
+        glGenBuffers_(1, &glemu_quadindexes);
+        unsigned short *data = new unsigned short[glemu_maxquads*6], *dst = data;
+        for(int idx = 0; idx < glemu_maxquads*4; idx += 4, dst += 6)
+        {
+            dst[0] = idx;
+            dst[1] = idx + 1;
+            dst[2] = idx + 2;
+            dst[3] = idx + 0;
+            dst[4] = idx + 2;
+            dst[5] = idx + 3;
+        }
+        glBindBuffer_(GL_ELEMENT_ARRAY_BUFFER, glemu_quadindexes);
+        glBufferData_(GL_ELEMENT_ARRAY_BUFFER, glemu_maxquads*6*sizeof(unsigned short), data, GL_STATIC_DRAW);
+        delete[] data;
+    }
+
+    void Opengl::Glemu_disablequads()
+    {
+        glemu_quadsenabled = false;
+
+        if(glversion < 300) return;
+
+        glBindBuffer_(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
+
+    void Opengl::Glemu_drawquads(int offset, int count)
+    {
+        if(count <= 0) return;
+        if(glversion < 300)
+        {
+            glDrawArrays(GL_QUADS, offset*4, count*4);
+            return;
+        }
+        if(offset + count > glemu_maxquads)
+        {
+            if(offset >= glemu_maxquads) return;
+            count = glemu_maxquads - offset;
+        }
+        glDrawRangeElements_(GL_TRIANGLES, offset*4, (offset + count)*4-1, count*6, GL_UNSIGNED_SHORT, (ushort *)0 + offset*6);
+    }
+
+    void Opengl::Glemu_defattrib(int type, int size, int format)
+    {
+        if(type == ATTRIB_VERTEX)
+        {
+            glemu_numattribs = glemu_attribmask = 0;
+            glemu_vertexsize = 0;
+        }
+        glemu_changedattribs = true;
+        glemu_attribmask |= 1<<type;
+        glemu_attribinfo &a = glemu_attribdefs[glemu_numattribs++];
+        a.type = type;
+        a.size = size;
+        a.format = format;
+        switch(format)
+        {
+            case 'B': case GL_UNSIGNED_BYTE:  a.formatsize = 1; a.format = GL_UNSIGNED_BYTE; break;
+            case 'b': case GL_BYTE:           a.formatsize = 1; a.format = GL_BYTE; break;
+            case 'S': case GL_UNSIGNED_SHORT: a.formatsize = 2; a.format = GL_UNSIGNED_SHORT; break;
+            case 's': case GL_SHORT:          a.formatsize = 2; a.format = GL_SHORT; break;
+            case 'I': case GL_UNSIGNED_INT:   a.formatsize = 4; a.format = GL_UNSIGNED_INT; break;
+            case 'i': case GL_INT:            a.formatsize = 4; a.format = GL_INT; break;
+            case 'f': case GL_FLOAT:          a.formatsize = 4; a.format = GL_FLOAT; break;
+            case 'd': case GL_DOUBLE:         a.formatsize = 8; a.format = GL_DOUBLE; break;
+            default:                          a.formatsize = 0; a.format = GL_FALSE; break;
+        }
+        a.formatsize *= size;
+        a.offset = glemu_vertexsize;
+        glemu_vertexsize += a.formatsize;
+    }
+
+    void Opengl::Glemu_defattribs(const char *fmt)
+    {
+        for(;; fmt += 3)
+        {
+            GLenum format;
+            switch(fmt[0])
+            {
+                case 'v': format = ATTRIB_VERTEX; break;
+                case 'c': format = ATTRIB_COLOR; break;
+                case 't': format = ATTRIB_TEXCOORD0; break;
+                case 'T': format = ATTRIB_TEXCOORD1; break;
+                case 'n': format = ATTRIB_NORMAL; break;
+                case 'x': format = ATTRIB_TANGENT; break;
+                case 'w': format = ATTRIB_BONEWEIGHT; break;
+                case 'i': format = ATTRIB_BONEINDEX; break;
+                default: return;
+            }
+            Glemu_defattrib(format, fmt[1]-'0', fmt[2]);
+        }
+    }
+
+    inline void Opengl::Glemu_setattrib(const glemu_attribinfo &a, unsigned char *buf)
+    {
+        switch(a.type)
+        {
+            case ATTRIB_VERTEX:
+            case ATTRIB_TEXCOORD0:
+            case ATTRIB_TEXCOORD1:
+            case ATTRIB_BONEINDEX:
+                glVertexAttribPointer_(a.type, a.size, a.format, GL_FALSE, glemu_vertexsize, buf);
+                break;
+            case ATTRIB_COLOR:
+            case ATTRIB_NORMAL:
+            case ATTRIB_TANGENT:
+            case ATTRIB_BONEWEIGHT:
+                glVertexAttribPointer_(a.type, a.size, a.format, GL_TRUE, glemu_vertexsize, buf);
+                break;
+        }
+        if(!(glemu_enabled&(1<<a.type)))
+        {
+            glEnableVertexAttribArray_(a.type);
+            glemu_enabled |= 1<<a.type;
+        }
+    }
+
+    inline void Opengl::Glemu_unsetattrib(const glemu_attribinfo &a)
+    {
+        glDisableVertexAttribArray_(a.type);
+        glemu_enabled &= ~(1<<a.type);
+    }
+
+    inline void Opengl::Glemu_setattribs(unsigned char *buf)
+    {
+        bool forceattribs = glemu_numattribs != glemu_numlastattribs || glemu_vertexsize != glemu_lastvertexsize || buf != glemu_lastbuf;
+        if(forceattribs || glemu_changedattribs)
+        {
+            int diffmask = glemu_enabled & glemu_lastattribmask & ~glemu_attribmask;
+            if(diffmask) {
+                for (int i = 0; i < glemu_numlastattribs; ++i) {
+                    {
+                        const glemu_attribinfo &a = glemu_lastattribs[i];
+                        if (diffmask & (1 << a.type)) Glemu_unsetattrib(a);
+                    }
+                }
+            }
+            unsigned char *src = buf;
+                for(int i=0;i<glemu_numattribs;++i) {
+                const glemu_attribinfo &a = glemu_attribdefs[i];
+                if(forceattribs || a != glemu_lastattribs[i])
+                {
+                    Glemu_setattrib(a, src);
+                    glemu_lastattribs[i] = a;
+                }
+                src += a.formatsize;
+            }
+                glemu_lastbuf = buf;
+            glemu_numlastattribs = glemu_numattribs;
+            glemu_lastattribmask = glemu_attribmask;
+            glemu_lastvertexsize = glemu_vertexsize;
+            glemu_changedattribs = false;
+        }
+    }
+
+    void Opengl::Glemu_multidraw()
+    {
+        int start = glemu_multidrawstart.empty() ? glemu_multidrawstart.size() + glemu_multidrawcount.size() : 0,
+        count = glemu_attribbuf.size()/glemu_vertexsize - start;
+        if(count > 0)
+        {
+            glemu_multidrawstart.resize(start);
+            glemu_multidrawcount.resize(count);
+        }
+    }
+
+    int Opengl::Glemu_end()
+    {
+        unsigned char *buf = glemu_attribbuf.getbuf();
+        if(glemu_attribbuf.empty())
+        {
+            if(buf != glemu_attribdata)
+            {
+                glUnmapBuffer_(GL_ARRAY_BUFFER);
+                glemu_attribbuf.reset(glemu_attribdata, glemu_maxvboxsize);
+            }
+            return 0;
+        }
+        int start = 0;
+        if(glversion >= 300)
+        {
+            if(buf == glemu_attribdata)
+            {
+                if(glemu_vbooffset + glemu_attribbuf.size() >= glemu_maxvboxsize)
+                {
+                    if(!glemu_vbo) glGenBuffers_(1, &glemu_vbo);
+                    glBindBuffer_(GL_ARRAY_BUFFER, glemu_vbo);
+                    glBufferData_(GL_ARRAY_BUFFER, glemu_maxvboxsize, nullptr, GL_STREAM_DRAW);
+                    glemu_vbooffset = 0;
+                }
+                else if(!glemu_lastvertexsize) glBindBuffer_(GL_ARRAY_BUFFER, glemu_vbo);
+                void *dst = intel_mapbufferrange_bug ? NULL :
+                            glMapBufferRange_(GL_ARRAY_BUFFER, glemu_vbooffset, glemu_attribbuf.length(), GL_MAP_WRITE_BIT|GL_MAP_INVALIDATE_RANGE_BIT|GL_MAP_UNSYNCHRONIZED_BIT);
+                if(dst)
+                {
+                    memcpy(dst, glemu_attribbuf.getbuf(), glemu_attribbuf.size());
+                    glUnmapBuffer_(GL_ARRAY_BUFFER);
+                }
+                else glBufferSubData_(GL_ARRAY_BUFFER, glemu_vbooffset, glemu_attribbuf.size(), glemu_attribbuf.getbuf());
+            }
+            else glUnmapBuffer_(GL_ARRAY_BUFFER);
+            buf = (unsigned char *)0 + glemu_vbooffset;
+            if(glemu_vertexsize == glemu_lastvertexsize && buf >= glemu_lastbuf)
+            {
+                start = int(buf - glemu_lastbuf)/glemu_vertexsize;
+                if(glemu_primtype == GL_QUADS && (start%4 || start + glemu_attribbuf.size()/glemu_vertexsize >= 4*glemu_maxquads))
+                    start = 0;
+                else buf = glemu_lastbuf;
+            }
+            glemu_vbooffset += glemu_attribbuf.size();
+        }
+        Glemu_setattribs(buf);
+        int numvertexes = glemu_attribbuf.size()/glemu_vertexsize;
+        if(glemu_primtype == GL_QUADS)
+        {
+            if(!glemu_quadsenabled) Glemu_enablequads();
+            for(int quads = numvertexes/4;;)
+            {
+                int count = std::min(quads, static_cast<int>(glemu_maxquads));
+                Glemu_drawquads(start/4, count);
+                quads -= count;
+                if(quads <= 0) break;
+                setattribs(buf + 4*count*glemu_vertexsize);
+                start = 0;
+            }
+        }
+        else
+        {
+            if(glemu_multidrawstart.size())
+            {
+                Glemu_multidraw();
+                if(start) {
+                    for(int & i : glemu_multidrawstart) {
+                        i += start;
+                    }
+                }
+                glMultiDrawArrays_(glemu_primtype, glemu_multidrawstart.getbuf(), glemu_multidrawcount.getbuf(), glemu_multidrawstart.length());
+                glemu_multidrawstart.resize(0);
+                glemu_multidrawcount.resize(0);
+            }
+            else glDrawArrays(glemu_primtype, start, numvertexes);
+        }
+        glemu_attribbuf.reset(glemu_attribdata, glemu_maxvboxsize);
+        return numvertexes;
+    }
+
+    void Opengl::Glemu_setup()
+    {
+        if(glversion >= 300)
+        {
+            if(!glemu_defaultvao) glGenVertexArrays_(1, &glemu_defaultvao);
+            glBindVertexArray_(glemu_defaultvao);
+        }
+        glemu_attribdata = new unsigned char[glemu_maxvboxsize];
+        glemu_attribbuf.reset(glemu_attribdata, glemu_maxvboxsize);
+    }
+
+    void Opengl::Glemu_forcedisable()
+    {
+        for(int i = 0; glemu_enabled; i++) if(glemu_enabled&(1<<i)) { glDisableVertexAttribArray_(i); glemu_enabled &= ~(1<<i); }
+        glemu_numlastattribs = glemu_lastattribmask = glemu_lastvertexsize = 0;
+        glemu_lastbuf = nullptr;
+        if(glemu_quadsenabled) Glemu_disablequads();
+        if(glversion >= 300) glBindBuffer_(GL_ARRAY_BUFFER, 0);
+    }
+
+
+    void Opengl::Glemu_cleanup()
+    {
+        Glemu_disable();
+
+        if(glemu_quadindexes) { glDeleteBuffers_(1, &glemu_quadindexes); glemu_quadindexes = 0; }
+
+        if(glemu_vbo) { glDeleteBuffers_(1, &glemu_vbo); glemu_vbo = 0; }
+        glemu_vbooffset = glemu_maxvboxsize;
+
+        if(glemu_defaultvao) { glDeleteVertexArrays_(1, &glemu_defaultvao); glemu_defaultvao = 0; }
+    }
+
+    inline void Opengl::Glemu_disable() {
+        if(glemu_enabled){
+            Glemu_forcedisable();
+        }
+    }
+
+    void Opengl::defvertex(int size, int format) {
+        Glemu_defattrib(ATTRIB_VERTEX, size, format);
+    }
+
+    void Opengl::defcolor(int size, int format) {
+        Glemu_defattrib(ATTRIB_COLOR, size, format);
+    }
+
+    void Opengl::deftexcoord0(int size, int format) {
+        Glemu_defattrib(ATTRIB_TEXCOORD0, size, format);
+    }
+
+    void Opengl::deftexcoord1(int size, int format) {
+        Glemu_defattrib(ATTRIB_TEXCOORD1, size, format);
+    }
+
+    void Opengl::defnormal(int size, int format) {
+        Glemu_defattrib(ATTRIB_NORMAL, size, format);
+    }
+
+    void Opengl::deftangent(int size, int format) {
+        Glemu_defattrib(ATTRIB_TANGENT, size, format);
+    }
+
+    void Opengl::defboneweight(int size, int format) {
+        Glemu_defattrib(ATTRIB_BONEWEIGHT, size, format);
+    }
+
+    void Opengl::defboneindex(int size, int format) {
+        Glemu_defattrib(ATTRIB_BONEINDEX, size, format);
+    }
+
+
+
 }

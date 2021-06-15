@@ -14,8 +14,8 @@
 #include "../../state.h"
 #include "../../../log/LogHandler.h"
 #include "../../../config/Config.h"
-#include "iHardwareAccel.h"
-#include "hardwareaccel/Opengl.h"
+#include "iRenderer.h"
+#include "renderer/opengl/Opengl.h"
 #include "../../engine.h"
 
 namespace kraut::engine::hal::video::sdl {
@@ -76,7 +76,7 @@ namespace kraut::engine::hal::video::sdl {
         int sdl_xgrab_bug = 0;
         int glcompat;
 
-        hardwareaccel::iHardwareAccel *hardwareAccel;
+        renderer::iRenderer *renderer;
         engine::Engine *_engine;
     };
 }

@@ -2,12 +2,12 @@
 // Created by ztk on 2021-06-14.
 //
 
-#ifndef SAUERKRAUT_IHARDWAREACCEL_H
-#define SAUERKRAUT_IHARDWAREACCEL_H
+#ifndef SAUERKRAUT_IRENDERER_H
+#define SAUERKRAUT_IRENDERER_H
 
-namespace kraut::engine::hal::video::sdl::hardwareaccel {
+namespace kraut::engine::hal::video::sdl::renderer {
 
-    class iHardwareAccel {
+    class iRenderer {
 
     public:
         virtual bool checkextensions() = 0;
@@ -18,4 +18,4 @@ namespace kraut::engine::hal::video::sdl::hardwareaccel {
 
 }
 
-#endif //SAUERKRAUT_IHARDWAREACCEL_H
+#endif //SAUERKRAUT_IRENDERER_H
