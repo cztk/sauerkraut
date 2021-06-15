@@ -57,7 +57,6 @@ namespace kraut::engine::hal::video::sdl::hardwareaccel {
         int intel_mapbufferrange_bug= 0;
         int mesa_swap_bug= 0;
         int useubo= 1;
-        int usetexcompress= 1;
         int rtscissor= 1;
         int blurtile= 1;
         int rtsharefb= 1;
